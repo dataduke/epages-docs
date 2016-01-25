@@ -20,21 +20,48 @@ authors: ["Benjamin Nothdurft"]
 ### Solution Draft:
 
 - After careful evaluation of XYZ
+- Also opted against pre-db like redis
+- choose most simplest approach to reduce complexity and gain stability
 
-#### Step: Extend test suite reporting
+- Task breakdown structure
 
+#### 1 Extend test suite reporting
 
-#### Step Set up elasticsearch
+- extend reporter
 
+#### 2 Set up elasticsearch
 
-#### Set up logstash
+- circleci test
+- docker
+- official base image
+- general configuration
 
+#### 3 Set up logstash
 
-#### Integrate solution in continuous delivery pipeline
+- forwarder = processor and shipper
+- describe transformation process
+- templating
 
+#### 4 Integrate solution in continuous delivery pipeline
+
+- jenkins
+- one job
+- all jobs but without overwriting exit code
+- when stable also us exit code
+
+#### 5 Usage
+
+- Viewer
+- Rest-Client
+- Head-Plugin
 
 #### Summary
 
+- evaluation is much faster, do not have to connect to each job seperatly
+- failures are also found much faster, but directly connecting to the cluster.
+- Redundancy option by elasticsearch, nothing gets lost.
+- A lot of learnings in the ELK area.
+- Quiet satisfied with solution.
 
 ## Author
 
@@ -52,5 +79,6 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [ ] Add paragraph: Step 3: Set up logstash
 - [ ] Add snippet: Test data transformation
 - [ ] Add paragraph: Step 4: Integrate solution in continuous delivery pipeline
+- [ ] Add paragraph: Step 5: Usage
 - [ ] Add picture: Test data in database and clients
 - [ ] Add paragraph: Summary
