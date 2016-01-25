@@ -10,46 +10,44 @@ authors: ["Benjamin Nothdurft"]
 #### Introduction and motivation:
 
 
-
 #### Solution Approach:
 
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
 - B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
 
-### Solution Draft:
+#### Solution Draft:
 
 - After careful evaluation of XYZ
 - Also opted against pre-db like redis
 - choose most simplest approach to reduce complexity and gain stability
-
 - Task breakdown structure
 
-#### 1 Extend test suite reporting
+#### 1 - Extend test suite reporting
 
 - extend reporter
 
-#### 2 Set up elasticsearch
+#### 2 - Set up elasticsearch
 
 - circleci test
 - docker
 - official base image
 - general configuration
 
-#### 3 Set up logstash
+#### 3 - Set up logstash
 
 - forwarder = processor and shipper
 - describe transformation process
 - templating
 
-#### 4 Integrate solution in continuous delivery pipeline
+#### 4 - Integrate solution in continuous delivery pipeline
 
 - jenkins
 - one job
 - all jobs but without overwriting exit code
 - when stable also us exit code
 
-#### 5 Usage
+#### 5 - Usage
 
 - Viewer
 - Rest-Client
