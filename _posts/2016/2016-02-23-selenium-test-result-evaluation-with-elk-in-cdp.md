@@ -7,6 +7,35 @@ categories: tech-stories selenium testing elk cdp elasticsearch logstash continu
 authors: ["Benjamin Nothdurft"]
 ---
 
+#### Introduction and motivation:
+
+
+
+#### Solution Approach:
+
+- 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
+- A: needs database schema and maintenance of it, less flexibilty
+- B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
+
+### Solution Draft:
+
+- After careful evaluation of XYZ
+
+#### Step: Extend test suite reporting
+
+
+#### Step Set up elasticsearch
+
+
+#### Set up logstash
+
+
+#### Integrate solution in continuous delivery pipeline
+
+
+#### Summary
+
+
 ## Author
 
 You may follow me at [@dataduke](https://twitter.com/dataduke).
