@@ -7,8 +7,27 @@ categories: tech-stories selenium testing elk cdp elasticsearch logstash continu
 authors: ["Benjamin Nothdurft"]
 ---
 
-#### Introduction and motivation:
+#### Teaser
 
+We implemented an ELK-based selenium test report database to ease the test evaluation in our continuous delivery pipeline. Today we want to share with you the general ideas of the completed implementation and the pragmatic benefits for our team. This articel should also serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
+
+#### Introduction and Motivation
+
+Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next version of the epages plattform. The development teams are highly deliberated in implementing a lot of new features with corresponding automated ui tests to safeguard the functionality of every cartridge. 
+
+At the release automation team we run all the provided tests in various groups on every possible type of epages environment, which is installed or patched at each run of our continuous delivery pipeline. Before we can relase a new version of epages our daily business is to check that no test has failed on every epages environemnt. Every day there are several hundreds of test results that need to be evaluated on a dozen of different machines simulating all use cases in production.
+
+Not too long ago our team has arrived at a point where it was a tedious hassle to collect the daily test logs and reports into our knowledge base so we decided to figure out an effictive, reliable and of course fully automated solution. Several essential requirements needed to be met:
+
+- Easy to implement.
+- Low maintanance in the future.
+- Extendable for other tasks in the pipline.
+
+# old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.
+# old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html).
+
+- Pipeline with Continous delivery
+- Test results from various environments
 
 #### Solution Approach:
 
