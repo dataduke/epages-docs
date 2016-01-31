@@ -54,17 +54,18 @@ The first step included the definition of our test object in a new JSON format a
         "epages_repo_id": "6.17.31/2015.09.16-17.42.55",
         "pos": "12",
         "result": "FAILURE",
+        "timestamp": "20150916T233740643Z",
         "test": "RegisteredCustomerOrder.checkoutAndRegisterAsCustomer",
         "class": "com.epages.cartridges.de_epages.order.tests.RegisteredCustomerOrder",
         "method": "checkoutAndRegisterAsCustomer",
         "note": "",
-        "report_url": "http://jenkins.intern.epages.de:8080/job/matrix_Automated_ui_tests_CORE_and_SEARCH/1251/browser=firefox,groups_to_test=CORE/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/2015.09.16_23.37.40_643/esf-test-reports/com/epages/cartridges/de_epages/order/tests/RegisteredCustomerOrder/checkoutAndRegisterAsCustomer/test-report.html",
+        "report_url": "http://jenkins.intern.epages.de:8080/job/matrix_Automated_ui_tests_CORE_and_SEARCH/1251/browser=firefox,groups_to_test=CORE/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20150916T233740643Z/esf-test-reports/com/epages/cartridges/de_epages/order/tests/RegisteredCustomerOrder/checkoutAndRegisterAsCustomer/test-report.html",
         "runtime":"345",
         "stacktrace": "TODO add stacktrace" 
 }
 ```
 
-As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
+As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, timestamp, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
 
 ### Implementation Part 2 - Set up elasticsearch
 
