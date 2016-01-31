@@ -7,12 +7,6 @@ categories: tech-stories selenium testing elk cdp elasticsearch logstash continu
 authors: ["Benjamin Nothdurft"]
 ---
 
-[comment]: <> (old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.)
-[comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
-[comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
-[comment]:  <> (old: - Pipeline with Continous delivery)
-[comment]:  <> (old: - Test results from various environments)
-
 ## Teaser
 
 We implemented an selenium test report database based on elasticsearch to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
@@ -45,7 +39,6 @@ At first glance we had two different ideas for our architectural implementation:
 
 After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
-
 
 #### Implementation Part 1 - Extend test suite reporting
 
@@ -120,6 +113,14 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [ ] Add paragraph: Step 5: Usage
 - [ ] Add picture: Test data in database and clients
 - [ ] Add paragraph: Summary
+
+## Comments
+
+[comment]: <> (old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.)
+[comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
+[comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
+[comment]:  <> (old: - Pipeline with Continous delivery)
+[comment]:  <> (old: - Test results from various environments)
 
 ## Notes
 
