@@ -33,14 +33,16 @@ This tedious collection task was soon identified as a major pain point. Hence, w
 
 After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
 
-* Simplicity: needs to be easy to implement, test, configure and maintain.
-* Expandability: needs to handle other kinds of logs in our pipeline. 
+* Simplicity: The solution needs to be easy to implement, test, configure and maintain.
+* Expandability: Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
 
 ## Solution Approaches
 
-At first glance we had two different ideas for our architectural implementation.
+At first glance we had two different ideas for our architectural implementation:
 
-Option A 
+* Option A: Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
+* Option B: 
+
 
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
