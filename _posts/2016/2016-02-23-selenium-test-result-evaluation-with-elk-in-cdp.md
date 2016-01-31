@@ -13,28 +13,34 @@ authors: ["Benjamin Nothdurft"]
 [comment]:  <> (old: - Pipeline with Continous delivery)
 [comment]:  <> (old: - Test results from various environments)
 
-#### Teaser
+## Teaser
 
 We implemented an selenium test report database based on elasticsearch to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
-#### Introduction and Motivation
+## Introduction
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next version of the epages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next iteration of epages our daily business is the evaluation of all these test results on every epages installation. Every day several hundreds of test results are created and need to be checked for failures on a dozen of different machines simulating various use cases of epages in production.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next iteration of epages the evaluation of all test results from each epages machine is very important.
 
-#### Solution Approach
+## Motivation
 
-Not too long ago our release and test automation team has arrived at a point where it was a tedious hassle to collect these test logs into our knowledge base so we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. At a first thought we determined that two non-functional requirements should be in the focus of interest:
+In the past an engineer of the release and test automation team needed to log in to a dozen of different pipeline machines – which simulate the various use cases of epages in production – to collect hundreds of test results, transfer them into our developer wiki and check them for failures on a daily basis.
 
-* Simplicity: The solution needs to be easy to implement, test, configure and maintain.
-* Expandability: Later on, the solution should also be able to handle other kinds of logs in our pipeline. 
+This tedious collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. 
 
-#### Solution Draft
+## Requirements
 
-At first we had two basic ideas for our architectural basis:
+After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
 
-* Option A:
+* Simplicity: needs to be easy to implement, test, configure and maintain.
+* Expandability: needs to handle other kinds of logs in our pipeline. 
+
+## Solution Approaches
+
+At first glance we had two different ideas for our architectural implementation.
+
+Option A 
 
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
