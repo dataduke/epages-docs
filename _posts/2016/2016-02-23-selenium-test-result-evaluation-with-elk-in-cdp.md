@@ -9,7 +9,7 @@ authors: ["Benjamin Nothdurft"]
 
 ### Teaser
 
-We implemented an selenium test report database based on elasticsearch to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
 ### Introduction
 
