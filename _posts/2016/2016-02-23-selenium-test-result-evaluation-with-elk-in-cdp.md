@@ -7,30 +7,30 @@ categories: tech-stories selenium testing elk cdp elasticsearch logstash continu
 authors: ["Benjamin Nothdurft"]
 ---
 
-## Teaser
+### Teaser
 
 We implemented an selenium test report database based on elasticsearch to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
-## Introduction
+### Introduction
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next version of the epages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
 In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next iteration of epages the evaluation of all test results from each epages machine is very important.
 
-## Motivation
+### Motivation
 
 In the past an engineer of the release and test automation team needed to log in to a dozen of different pipeline machines – which simulate the various use cases of epages in production – to collect hundreds of test results, transfer them into our developer wiki and check them for failures on a daily basis.
 
 This tedious collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. 
 
-## Requirements
+### Requirements
 
 After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
 
 * Simplicity: The solution needs to be easy to implement, test, configure and maintain.
 * Expandability: Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
 
-## Two Solution Approaches
+### Two Solution Approaches
 
 At first glance we had two different ideas for our architectural implementation:
 
@@ -40,7 +40,7 @@ At first glance we had two different ideas for our architectural implementation:
 After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
 
-#### Implementation Part 1 - Define test object and extend test suite reporter
+### Implementation Part 1 - Define test object and extend test suite reporter
 
 The first step included the definition of our test object in a new JSON format as elasticsearch is known document storage solution depending heavily on this format.
 
@@ -66,14 +66,14 @@ The first step included the definition of our test object in a new JSON format a
 
 As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
 
-#### Implementation Part 2 - Set up elasticsearch
+### Implementation Part 2 - Set up elasticsearch
 
 - circleci test
 - docker
 - official base image
 - general configuration
 
-#### Implementation Part 3 - Set up logstash
+### Implementation Part 3 - Set up logstash
 
 - forwarder = processor and shipper
 - describe transformation process
@@ -95,20 +95,20 @@ Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:92
 Set elasticsearch index:            esf-build-ui-tests
 Set elasticsearch document type:    1511
 
-#### Implementation Part 4 - Integrate solution in continuous delivery pipeline
+### Implementation Part 4 - Integrate solution in continuous delivery pipeline
 
 - jenkins
 - one job
 - all jobs but without overwriting exit code
 - when stable also us exit code
 
-#### Implementation Part 5 - Usage
+### Implementation Part 5 - Usage
 
 - Viewer
 - Rest-Client
 - Head-Plugin
 
-#### Summary
+### Summary
 
 - evaluation is much faster, do not have to connect to each job seperatly
 - failures are also found much faster, but directly connecting to the cluster.
@@ -116,11 +116,11 @@ Set elasticsearch document type:    1511
 - A lot of learnings in the ELK area.
 - Quiet satisfied with solution.
 
-## Author
+### Author
 
 You may follow me at [@dataduke](https://twitter.com/dataduke).
 
-## Writing Tasks
+### Writing Tasks
 
 - [x] Add paragraph: Introduction and motivation
 - [x] Add paragraph: Problem-Solving-Process
@@ -136,7 +136,7 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [ ] Add picture: Test data in database and clients
 - [ ] Add paragraph: Summary
 
-## Comments
+### Comments
 
 [comment]: <> (old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.)
 [comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
@@ -144,7 +144,7 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 [comment]:  <> (old: - Pipeline with Continous delivery)
 [comment]:  <> (old: - Test results from various environments)
 
-## Notes
+### Notes
 
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
