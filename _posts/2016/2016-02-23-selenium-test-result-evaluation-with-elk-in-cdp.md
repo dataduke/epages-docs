@@ -36,22 +36,16 @@ After careful consideration we determined that two non-functional requirements s
 * Simplicity: The solution needs to be easy to implement, test, configure and maintain.
 * Expandability: Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
 
-## Solution Approaches
+## Two Solution Approaches
 
 At first glance we had two different ideas for our architectural implementation:
 
 * Option A: Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
-* Option B: 
+* Option B: Take the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapt it to fit our test results and throw each part in an independent docker container. Test the individual containers in CircleCi and - after success - push them to our docker registry. Let the pipeline pull the container and run them with the dedicated configuration for each Jenkins job.
 
+After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
+Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
 
-- 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
-- A: needs database schema and maintenance of it, less flexibilty
-- B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
-
-- After careful evaluation of XYZ
-- Also opted against pre-db like redis
-- choose most simplest approach to reduce complexity and gain stability
-- Task breakdown structure
 
 #### 1 - Extend test suite reporting
 
@@ -127,3 +121,13 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [ ] Add picture: Test data in database and clients
 - [ ] Add paragraph: Summary
 
+## Notes
+
+- 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
+- A: needs database schema and maintenance of it, less flexibilty
+- B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
+
+- After careful evaluation of XYZ
+- Also opted against pre-db like redis
+- choose most simplest approach to reduce complexity and gain stability
+- Task breakdown structure
