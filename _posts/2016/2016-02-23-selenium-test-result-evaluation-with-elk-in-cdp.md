@@ -126,7 +126,7 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [x] Add paragraph: Problem-Solving-Process
 - [x] Add paragraph: Solution approach
 - [x] Add picture: Solution draft
-- [ ] Add paragraph: Step 1: Extend test suite reporting
+- [x] Add paragraph: Step 1: Extend test suite reporting
 - [ ] Add snippet: Test data structure
 - [ ] Add paragraph: Step 2: Set up elasticsearch
 - [ ] Add paragraph: Step 3: Set up logstash
