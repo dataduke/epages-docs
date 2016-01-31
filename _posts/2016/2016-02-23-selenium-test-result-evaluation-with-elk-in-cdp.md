@@ -47,18 +47,18 @@ After a team-internal discussion we concluded that we wanted to implement the op
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
 
 
-#### 1 - Extend test suite reporting
+#### Implementation Part 1 - Extend test suite reporting
 
 - extend reporter
 
-#### 2 - Set up elasticsearch
+#### Implementation Part 2 - Set up elasticsearch
 
 - circleci test
 - docker
 - official base image
 - general configuration
 
-#### 3 - Set up logstash
+#### Implementation Part 3 - Set up logstash
 
 - forwarder = processor and shipper
 - describe transformation process
@@ -80,14 +80,14 @@ Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:92
 Set elasticsearch index:            esf-build-ui-tests
 Set elasticsearch document type:    1511
 
-#### 4 - Integrate solution in continuous delivery pipeline
+#### Implementation Part 4 - Integrate solution in continuous delivery pipeline
 
 - jenkins
 - one job
 - all jobs but without overwriting exit code
 - when stable also us exit code
 
-#### 5 - Usage
+#### Implementation Part 5 - Usage
 
 - Viewer
 - Rest-Client
@@ -107,10 +107,10 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 
 ## Writing Tasks
 
-- [ ] Add paragraph: Introduction and motivation
-- [ ] Add paragraph: Problem-Solving-Process
-- [ ] Add paragraph: Solution approach
-- [ ] Add picture: Solution draft
+- [x] Add paragraph: Introduction and motivation
+- [x] Add paragraph: Problem-Solving-Process
+- [x] Add paragraph: Solution approach
+- [x] Add picture: Solution draft
 - [ ] Add paragraph: Step 1: Extend test suite reporting
 - [ ] Add snippet: Test data structure
 - [ ] Add paragraph: Step 2: Set up elasticsearch
