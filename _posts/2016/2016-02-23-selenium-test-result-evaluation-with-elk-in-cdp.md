@@ -8,6 +8,10 @@ authors: ["Benjamin Nothdurft"]
 ---
 
 [comment]: <> (old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.)
+[comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
+[comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
+[comment]:  <> (old: - Pipeline with Continous delivery)
+[comment]:  <> (old: - Test results from various environments)
 
 #### Teaser
 
@@ -19,17 +23,14 @@ Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015
 
 In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next iteration of epages our daily business is the evaluation of all these test results on every epages installation. Every day several hundreds of test results are created and need to be checked for failures on a dozen of different machines simulating various use cases of epages in production.
 
-Not too long ago our release and test automation team has arrived at a point where it was a tedious hassle to collect these test logs into our knowledge base so we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. At a first draft we determined that two non-functional requirements should be in the focus of interest:
+#### Solution Approach
+
+Not too long ago our release and test automation team has arrived at a point where it was a tedious hassle to collect these test logs into our knowledge base so we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. At a first thought we determined that two non-functional requirements should be in the focus of interest:
 
 * Simplicity: The solution needs to be easy to implement, test, configure and maintain.
 * Expandability: Later on, the solution should also be able to handle other kinds of logs in our pipeline. 
 
-[comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
-[comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
-[comment]:  <> (old: - Pipeline with Continous delivery)
-[comment]:  <> (old: - Test results from various environments)
-
-#### Solution Approach
+#### Solution Draft
 
 At first we had two basic ideas for our architectural basis:
 
@@ -38,8 +39,6 @@ At first we had two basic ideas for our architectural basis:
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
 - B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
-
-#### Solution Draft:
 
 - After careful evaluation of XYZ
 - Also opted against pre-db like redis
