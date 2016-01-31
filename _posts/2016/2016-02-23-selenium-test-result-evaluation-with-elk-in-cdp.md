@@ -35,14 +35,36 @@ After careful consideration we determined that two non-functional requirements s
 At first glance we had two different ideas for our architectural implementation:
 
 * Option A: Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
-* Option B: Take the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapt it to fit our test results and throw each part in an independent docker container. Test the individual containers in CircleCi and - after success - push them to our docker registry. Let the pipeline pull the container and run them with the dedicated configuration for each Jenkins job.
+* Option B: Take the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapt it to fit our test results and throw each part in an independent docker container. Test the individual containers in CircleCi and - after success - push them to our docker registry. Let the pipeline pull the containers on-time and run them with the dedicated configuration for each Jenkins job.
 
 After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
 
-#### Implementation Part 1 - Extend test suite reporting
+#### Implementation Part 1 - Define test object and extend test suite reporter
 
-- extend reporter
+The first step included the definition of our test object in a new JSON format as elasticsearch is known document storage solution depending heavily on this format.
+
+```JSON
+{
+		"browser": "firefox",
+        "env_os": "debian",
+        "env_type": "install",
+        "env_identifier": "distributed",
+        "epages_version": "6.17.31",
+        "epages_repo_id": "6.17.31/2015.09.16-17.42.55",
+        "pos": "12",
+        "result": "FAILURE",
+        "test": "RegisteredCustomerOrder.checkoutAndRegisterAsCustomer",
+        "class": "com.epages.cartridges.de_epages.order.tests.RegisteredCustomerOrder",
+        "method": "checkoutAndRegisterAsCustomer",
+        "note": "",
+        "report_url": "http://jenkins.intern.epages.de:8080/job/matrix_Automated_ui_tests_CORE_and_SEARCH/1251/browser=firefox,groups_to_test=CORE/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/2015.09.16_23.37.40_643/esf-test-reports/com/epages/cartridges/de_epages/order/tests/RegisteredCustomerOrder/checkoutAndRegisterAsCustomer/test-report.html",
+        "runtime":"345",
+        "stacktrace": "TODO add stacktrace" 
+}
+```
+
+As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
 
 #### Implementation Part 2 - Set up elasticsearch
 
