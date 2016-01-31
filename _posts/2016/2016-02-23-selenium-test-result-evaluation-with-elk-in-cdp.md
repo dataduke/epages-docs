@@ -40,7 +40,7 @@ At first glance we had two different ideas for our architectural implementation:
 After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
 
-### Implementation Part 1 - Define test object and extend test suite reporter
+### Implementation Part 1 - Define Test Object and Extend Test Suite Reporter
 
 The first step included the definition of our test object in a new JSON format as elasticsearch is known document storage solution depending heavily on this format.
 
@@ -67,14 +67,14 @@ The first step included the definition of our test object in a new JSON format a
 
 As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, timestamp, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
 
-### Implementation Part 2 - Set up elasticsearch
+### Implementation Part 2 - Set up Elasticsearch using Docker and CircleCi
 
 - circleci test
 - docker
 - official base image
 - general configuration
 
-### Implementation Part 3 - Set up logstash
+### Implementation Part 3 - Set up Logstash using Docker and CircleCi
 
 - forwarder = processor and shipper
 - describe transformation process
@@ -96,14 +96,14 @@ Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:92
 Set elasticsearch index:            esf-build-ui-tests
 Set elasticsearch document type:    1511
 
-### Implementation Part 4 - Integrate solution in continuous delivery pipeline
+### Implementation Part 4 - Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
 
 - jenkins
 - one job
 - all jobs but without overwriting exit code
 - when stable also us exit code
 
-### Implementation Part 5 - Usage
+### Implementation Part 5 - Set up Elasticsearch UI Client to Evaluate Test Results
 
 - Viewer
 - Rest-Client
