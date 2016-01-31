@@ -22,7 +22,7 @@ In our continuous delivery pipeline we run all these provided tests in various s
 Not too long ago our release and test automation team has arrived at a point where it was a tedious hassle to collect these test logs into our knowledge base so we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. At a first draft we determined that two non-functional requirements should be in the focus of interest:
 
 * Simplicity: The solution needs to be easy to implement, test, configure and maintain.
-* Expandability: The solution should also be able to handle other kinds of logs in our pipeline and 
+* Expandability: Later on, the solution should also be able to handle other kinds of logs in our pipeline. 
 
 [comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
 [comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
