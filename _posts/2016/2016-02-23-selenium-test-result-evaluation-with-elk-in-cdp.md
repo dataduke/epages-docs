@@ -82,6 +82,17 @@ As the target format (see code listing) suggests some information could be easil
 - input: esf-report.json, template-esf.json
 - output: logstash-info.json, logstash-error.json
 
+
+### Implementation Part 4 - Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
+
+- jenkins
+- one job
+- all jobs but without overwriting exit code
+- when stable also us exit code
+
+```bash
+==== Start docker container ===
+
 Process logs with pattern:          *esf*.json
 Mount log directory:                /home/jenkins/jenkins/workspace/esf_integration_run_on_non-windows_slaves/browser/firefox/groups_to_test/SEARCH/operating_system/linux/esf/esf-epages6-1.15.0-SNAPSHOT/log
 Mount config directory:             /home/jenkins/jenkins/workspace/esf_integration_run_on_non-windows_slaves/browser/firefox/groups_to_test/SEARCH/operating_system/linux/to-logstash/config
@@ -95,13 +106,7 @@ Use elasticsearch template file:    template-esf.json
 Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:9200' ]
 Set elasticsearch index:            esf-build-ui-tests
 Set elasticsearch document type:    1511
-
-### Implementation Part 4 - Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
-
-- jenkins
-- one job
-- all jobs but without overwriting exit code
-- when stable also us exit code
+```
 
 ### Implementation Part 5 - Set up Elasticsearch UI Client to Evaluate Test Results
 
