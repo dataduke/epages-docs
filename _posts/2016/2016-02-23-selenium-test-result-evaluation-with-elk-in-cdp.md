@@ -42,7 +42,7 @@ Additionally considering the ease of extension in the future as well as a low ef
 
 ### Implementation Part 1 - Define Test Object and Extend Test Suite Reporter
 
-The first step included the definition of our test object in a new JSON format as elasticsearch is a common document storage solution depending heavily on this format.
+Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in elasticsearch as JSON documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of the database.
 
 ```JSON
 {
@@ -55,16 +55,18 @@ The first step included the definition of our test object in a new JSON format a
     "timestamp": "2016-01-26T001726091Z",
     "pos": "3",
     "result": "FAILURE",
-    "test": "DigitalTaxmatrixBasketTest.digitalTaxmatrixBasketTest",
+    "test": "DigitalTaxmatrixBasketTest.testDigitalTaxmatrixBasket",
     "class": "com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest",
-    "method": "digitalTaxmatrixBasketTest",
+    "method": "testDigitalTaxmatrixBasket",
     "runtime": "275",
-    "report_url": "http://jenkins.intern.epages.de:8080/job/Run_ESF_tests/3778/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20160125T202150651Z/esf-test-reports/com/epages/cartridges/de_epages/tax/tests/DigitalTaxmatrixBasketTest/digitalTaxmatrixBasketTest/test-report.html"
-    "stacktrace": "org.openqa.selenium.TimeoutException: Timed out after 30 seconds waiting for presence of element located by: By.className: Saved Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44' System info: host: 'ci-vm-ui-test-004', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '3.13.0-43-generic', java.version: '1.8.0_45-internal' Driver info: org.openqa.selenium.support.events.EventFiringWebDriver at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80) at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:491) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:468) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:451) at com.epages.cartridges.de_epages.coupon.pageobjects.mbo.ViewCouponCodes.createmanualCouponCode(ViewCouponCodes.java:159) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.setupCoupon(DigitalTaxmatrixBasketTest.java:882) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.digitalTaxmatrixBasketTest(DigitalTaxmatrixBasketTest.java:172)",
+    "report_url": "http://jenkins.intern.epages.de:8080/job/Run_ESF_tests/3778/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20160125T202150651Z/esf-test-reports/com/epages/cartridges/de_epages/tax/tests/DigitalTaxmatrixBasketTest/testDigitalTaxmatrixBasket/test-report.html"
+    "stacktrace": "org.openqa.selenium.TimeoutException: Timed out after 30 seconds waiting for presence of element located by: By.className: Saved Build info: version: '2.47.1', System info: host: 'ci-vm-ui-test-004', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '3.13.0-43-generic', java.version: '1.8.0_45-internal' Driver info: org.openqa.selenium.support.events.EventFiringWebDriver at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80) at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:491) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:468) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:451) at com.epages.cartridges.de_epages.coupon.pageobjects.mbo.ViewCouponCodes.createmanualCouponCode(ViewCouponCodes.java:159) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.setupCoupon(DigitalTaxmatrixBasketTest.java:882) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.testDigitalTaxmatrixBasket(DigitalTaxmatrixBasketTest.java:172)"                                                                                               
 }
 ```
 
-As the target format (see code listing) suggests some information could be easily gathered by extending our TestReporter to also write a JSON log file, namely the fields: browser, pos, result, timestamp, test, class, method and runtime. We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
+Some information could be easily gathered by extending our TestReporter in the test suite core. The implemented ouput JSON log file contains test objects with the following fields: browser, pos, result, timestamp, test, class, method, runtime and the stacktrace. The other fields will need to be enriched at the proccessing step in the pipeline. We will discuss these entries in the logstash chapter.
+
+We determined to create the JSON log in the reduced format and let logstash do the enrichment with the other fields at the time the test result objects will be processed in the pipeline and directly before forwarding them to elasticsearch.
 
 ### Implementation Part 2 - Set up Elasticsearch using Docker and CircleCi
 
@@ -80,7 +82,6 @@ As the target format (see code listing) suggests some information could be easil
 - templating
 - input: esf-report.json, template-esf.json
 - output: logstash-info.json, logstash-error.json
-
 
 ### Implementation Part 4 - Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
 
