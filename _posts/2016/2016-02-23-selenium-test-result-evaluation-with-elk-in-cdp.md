@@ -4,7 +4,7 @@ title: "Optimised Collection and Evaluation of Selenium UI Test Result Data for 
 date: "2016-02-23 10:47:30"
 icon: wrench
 categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
-authors: ["Benjamin Nothdurft"]
+authors: ["Benjamin Nothdurft","Bastian Klein"\]
 ---
 
 [comment]: <> (Teaser)
@@ -13,13 +13,13 @@ We implemented a Selenium test report database with Elasticsearch, Logstash, Doc
 
 ## Introduction
 
-Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the epages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
+Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of epages the evaluation of all test results from each epages machine is very important.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of epages the evaluation of all test results from each epages machine is very important.
 
 ## Motivation
 
-In the past an engineer of the release and test automation team needed to log in to a dozen of different pipeline machines – which simulate the various use cases of epages in production – to collect hundreds of test results, transfer them into our developer wiki and check them for failures on a daily basis.
+In the past an engineer of the release and test automation team needed to log in to a dozen of different pipeline machines – which simulate the various use cases of ePages in production – to collect hundreds of test results, transfer them into our developer wiki and check them for failures on a daily basis.
 
 This tedious collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. 
 
@@ -42,9 +42,13 @@ Additionally considering the ease of extension in the future as well as a low ef
 
 ## Implementation
 
+2 describing sentences to blueprint of architectural approach
+
+[Blueprint of Architecture](path/to/img)
+
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
-Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in elasticsearch as JSON documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of the elasticsearch.
+Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in Elasticsearch as JSON documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
 
 ```JSON
 {
@@ -68,7 +72,7 @@ Our inital task consisted of the definiton of the desired target format for the 
 
 Some information could be easily gathered by extending our TestReporter located in the core of our ePages selenium framework. Thus, we created a writer that could ouput log files containing single-line JSON test objects with the following fields: browser, pos, result, timestamp, test, class, method, runtime and the stacktrace. 
 
-All other fields cannot be derieved from our test suite itself and therefore need to be enriched at the proccessing step in the pipeline. We will discuss these ingredients of the test object in the following logstash chapter.
+All other fields cannot be derived from our test suite itself and therefore need to be enriched at the processing step in the pipeline. We will discuss these ingredients of the test object in the following logstash chapter.
 
 ### Part 2: Set up Elasticsearch using Docker and CircleCi
 
@@ -133,7 +137,8 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [x] Add paragraph: Introduction and motivation
 - [x] Add paragraph: Problem-Solving-Process
 - [x] Add paragraph: Solution approach
-- [x] Add picture: Solution draft
+- [ ] Add paragraph: Implementation 
+- [ ] Add picture: Solution draft
 - [x] Add paragraph: Step 1: Extend test suite reporting
 - [ ] Add snippet: Test data structure
 - [ ] Add paragraph: Step 2: Set up elasticsearch
