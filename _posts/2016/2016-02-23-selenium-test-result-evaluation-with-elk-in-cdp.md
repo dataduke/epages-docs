@@ -17,7 +17,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of epages the evaluation of all test results from each epages machine is very important.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of ePages the evaluation of all test results from each epages machine is very important.
 
 ### Motivation
 
@@ -44,9 +44,9 @@ Additionally considering the ease of extension in the future as well as a low ef
 
 ## Implemented Solution
 
-2 describing sentences to blueprint of architectural approach
+2 describing sentences to the blueprint of the architecture.
 
-[Blueprint of Architecture](path/to/img)
+![Blueprint of the Architecture](/path/to/img.jpg "Blueprint of the Architecture")
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
@@ -78,10 +78,20 @@ All other fields cannot be derived from our test suite itself and therefore need
 
 ### Part 2: Set up Elasticsearch using Docker and CircleCi
 
-- circleci test
-- docker
-- official base image
-- general configuration
+**Dockerfile**
+
+We decided to run [Elasticsearch](https://www.elastic.co/products/elasticsearch) from within an effortlessly deployable and stable docker container. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the *Dockerfile* we synced our timezone, prepared templating with [Jinja](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and a REST-console. We needed to create and use our own *docker-entrypoint* script as we wanted to map a few host directories to more docker volumes than suggested by the base image.
+
+**Configuration**
+
+Besides using variables in the configuration and logging files of Elasticsearch the setup was quite straight forward. We reduced complexity via a bash script allowing to build the docker image and start the container. The script support the setting of the needed variables for the configuration files and hands them over into the running docker container. 
+For the operation of the Elasticsearch in our continuous delivery pipeline we implemented a verbose mode in the external bash script as well as the docker-entrypoint script so that we could follow each step in the console ouput.
+
+**Testing**
+
+We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these preparation steps several tests check if the elasticsearch service is reachable form outside the container and working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
+If a pull-reuest was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
+
 
 ### Part 3: Set up Logstash using Docker and CircleCi
 
