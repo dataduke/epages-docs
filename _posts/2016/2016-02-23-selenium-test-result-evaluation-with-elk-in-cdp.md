@@ -4,35 +4,37 @@ title: "Optimised Collection and Evaluation of Selenium UI Test Result Data for 
 date: "2016-02-23 10:47:30"
 icon: wrench
 categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
-authors: ["Benjamin Nothdurft","Bastian Klein"\]
+authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
 [comment]: <> (Teaser)
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the general ideas of the completed implementation and the pragmatic benefits for our company. Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the background information of the project, the general ideas of the implemented solution and discuss the pragmatic benefits for our company. 
 
-## Introduction
+Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
+
+## Background Information
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
 In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of epages the evaluation of all test results from each epages machine is very important.
 
-## Motivation
+### Motivation
 
 In the past an engineer of the release and test automation team needed to log in to a dozen of different pipeline machines – which simulate the various use cases of ePages in production – to collect hundreds of test results, transfer them into our developer wiki and check them for failures on a daily basis.
 
 This tedious collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports. 
 
-## Requirements
+### Requirements
 
 After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
 
 * Simplicity: The solution needs to be easy to implement, test, configure and maintain.
 * Expandability: Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
 
-## Two Solution Approaches
+### Two Options
 
-At first glance we had two different ideas for our architectural implementation:
+At first glance we had two different ideas for our architectural solution approaches:
 
 * **Option A:** Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
 * **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we could create a distrusted storage cluster with data mirroring.Test-driven development of the individual containers could be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
@@ -40,7 +42,7 @@ At first glance we had two different ideas for our architectural implementation:
 After a team-internal discussion we concluded that we want to implement **Option B** as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
 Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
 
-## Implementation
+## Implemented Solution
 
 2 describing sentences to blueprint of architectural approach
 
@@ -120,7 +122,7 @@ Set elasticsearch document type:    1511
 - Rest-Client
 - Head-Plugin
 
-## Summary
+## Summary and Discussion of Benefits
 
 - evaluation is much faster, do not have to connect to each job seperatly
 - failures are also found much faster, but directly connecting to the cluster.
