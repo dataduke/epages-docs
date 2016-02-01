@@ -144,15 +144,13 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - [ ] Add picture: Test data in database and clients
 - [ ] Add paragraph: Summary
 
-## Comments
-
-[comment]: <> (old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.)
-[comment]:  <> (old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.)
-[comment]:  <> (old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.)
-[comment]:  <> (old: - Pipeline with Continous delivery)
-[comment]:  <> (old: - Test results from various environments)
-
 ## Notes
+
+- old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.
+- old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.
+- old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.
+- old: Pipeline with Continous delivery
+- old: Test results from various environments
 
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
