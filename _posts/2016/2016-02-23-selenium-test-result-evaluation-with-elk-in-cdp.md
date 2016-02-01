@@ -13,9 +13,9 @@ We implemented a Selenium test report database with Elasticsearch, Logstash, Doc
 
 ### Introduction
 
-Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next version of the epages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
+Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the epages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next iteration of epages the evaluation of all test results from each epages machine is very important.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of epages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of epages the evaluation of all test results from each epages machine is very important.
 
 ### Motivation
 
@@ -42,26 +42,25 @@ Additionally considering the ease of extension in the future as well as a low ef
 
 ### Implementation Part 1 - Define Test Object and Extend Test Suite Reporter
 
-The first step included the definition of our test object in a new JSON format as elasticsearch is known document storage solution depending heavily on this format.
+The first step included the definition of our test object in a new JSON format as elasticsearch is a common document storage solution depending heavily on this format.
 
 ```JSON
 {
-		"browser": "firefox",
-        "env_os": "debian",
-        "env_type": "install",
-        "env_identifier": "distributed",
-        "epages_version": "6.17.31",
-        "epages_repo_id": "6.17.31/2015.09.16-17.42.55",
-        "pos": "12",
-        "result": "FAILURE",
-        "timestamp": "20150916T233740643Z",
-        "test": "RegisteredCustomerOrder.checkoutAndRegisterAsCustomer",
-        "class": "com.epages.cartridges.de_epages.order.tests.RegisteredCustomerOrder",
-        "method": "checkoutAndRegisterAsCustomer",
-        "note": "",
-        "report_url": "http://jenkins.intern.epages.de:8080/job/matrix_Automated_ui_tests_CORE_and_SEARCH/1251/browser=firefox,groups_to_test=CORE/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20150916T233740643Z/esf-test-reports/com/epages/cartridges/de_epages/order/tests/RegisteredCustomerOrder/checkoutAndRegisterAsCustomer/test-report.html",
-        "runtime":"345",
-        "stacktrace": "TODO add stacktrace" 
+    "epages_version": "6.17.39.1",
+    "epages_repo_id": "6.17.39.1/2016.01.25-19.28.12",
+    "env_os": "centos",
+    "env_identifier": "distributed_three_hosts",
+    "env_type": "install",
+    "browser": "firefox",
+    "timestamp": "2016-01-26T001726091Z",
+    "pos": "3",
+    "result": "FAILURE",
+    "test": "DigitalTaxmatrixBasketTest.digitalTaxmatrixBasketTest",
+    "class": "com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest",
+    "method": "digitalTaxmatrixBasketTest",
+    "runtime": "275",
+    "report_url": "http://jenkins.intern.epages.de:8080/job/Run_ESF_tests/3778/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20160125T202150651Z/esf-test-reports/com/epages/cartridges/de_epages/tax/tests/DigitalTaxmatrixBasketTest/digitalTaxmatrixBasketTest/test-report.html"
+    "stacktrace": "org.openqa.selenium.TimeoutException: Timed out after 30 seconds waiting for presence of element located by: By.className: Saved Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44' System info: host: 'ci-vm-ui-test-004', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '3.13.0-43-generic', java.version: '1.8.0_45-internal' Driver info: org.openqa.selenium.support.events.EventFiringWebDriver at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80) at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:491) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:468) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:451) at com.epages.cartridges.de_epages.coupon.pageobjects.mbo.ViewCouponCodes.createmanualCouponCode(ViewCouponCodes.java:159) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.setupCoupon(DigitalTaxmatrixBasketTest.java:882) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.digitalTaxmatrixBasketTest(DigitalTaxmatrixBasketTest.java:172)",
 }
 ```
 
