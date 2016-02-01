@@ -37,8 +37,8 @@ At first glance we had two different ideas for our architectural implementation:
 * **Option A:** Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
 * **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we could create a distrusted storage cluster with data mirroring.Test-driven development of the individual containers could be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
 
-After a team-internal discussion we concluded that we wanted to implement the option (B) as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
-Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the option (A).
+After a team-internal discussion we concluded that we wanted to implement **Option B** as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
+Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested by the **Option A**.
 
 ## Implementation
 
