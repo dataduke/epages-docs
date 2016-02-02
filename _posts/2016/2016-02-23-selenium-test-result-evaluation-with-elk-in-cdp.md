@@ -245,9 +245,14 @@ For our elasticsearch docker cluster we setup a new Jenkins job, which ensured t
 
 At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex.
 
-We also defined the usage voa browaser and search URI requests. 
-
 ![Elasticsearch UI Client](/path/to/img.jpg "Elasticsearch UI Client")
+
+We also support three other use cases:
+
+* the head plugin for elasticsearch.
+* the usage via browser and search URI requests, e.g. 
+* (https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
+
 
 ## Summary and Discussion of Benefits
 
