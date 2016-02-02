@@ -76,7 +76,7 @@ Some information could be easily gathered by extending our TestReporter located 
 
 All other fields cannot be derived from our test suite itself and therefore need to be enriched at the processing step in the pipeline. We will discuss these ingredients of the test object in the following logstash chapter.
 
-### Part 2: Set up Elasticsearch using Docker and CircleCi
+### Part 2: Set up Elasticsearch with Docker and CircleCi
 
 **Dockerfile**
 
@@ -93,7 +93,7 @@ We versioned the entire source code on [GitHub](https://github.com/). The first 
 If a pull-reuest was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
 
 
-### Part 3: Set up Logstash using Docker and CircleCi
+### Part 3: Set up Logstash with Docker and CircleCi
 
 - forwarder = processor and shipper
 - describe transformation process
@@ -103,13 +103,16 @@ If a pull-reuest was reviewed and merged into the dev branch of the upstream rep
 
 ### Part 4: Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
 
-- jenkins
-- one job
-- all jobs but without overwriting exit code
-- when stable also us exit code
+**Logstash**
+
+We have several pipeline jobs that run the test suite of the ePages selenium framework on all ePages environment machines. As a result they produce a single log file with the JSON test objects as described in part 1. The test suite is configured to always append new objects so that it doesn't matter if the test suite is invoked in a matrix job, with several test groups in parallel or with a retry option for aborted test if thirdparty sandboxes fail. 
+
+In such Jenkins jobs we added a separate build step where we first checked that all needed environment variables were used. 
+
+If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
 
 ```bash
-==== Start docker container ===
+==== Start logstash docker container [to-logstash-esf_integration_run_on_non-windows_slaves-SEARCH-linux-1511] ===
 
 Process logs with pattern:          *esf*.json
 Mount log directory:                /home/jenkins/jenkins/workspace/esf_integration_run_on_non-windows_slaves/browser/firefox/groups_to_test/SEARCH/operating_system/linux/esf/esf-epages6-1.15.0-SNAPSHOT/log
@@ -125,6 +128,12 @@ Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:92
 Set elasticsearch index:            esf-build-ui-tests
 Set elasticsearch document type:    1511
 ```
+
+All shipped test-objects are saved to a logstash info log, which is archived as build artifact in the clean-up section of Jenkins.
+
+**Elasticsearch**
+
+For our elasticsearch docker cluster we setup a new Jenkins job, which ensured that always the latest version of our container is running. We made sure to mount several host directories so that the elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots.
 
 ### Part 5: Set up Elasticsearch UI Client to Evaluate Test Results
 
