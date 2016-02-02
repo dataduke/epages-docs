@@ -9,7 +9,7 @@ authors: ["Benjamin Nothdurft", "Bastian Klein"]
 
 [comment]: <> (Teaser)
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share  with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive test evaluation. 
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline (CDP). Today we want to share  with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation. 
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
@@ -17,7 +17,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each epages machine is a fundamentally important duty before releasing the next version increment of ePages.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each ePages CDP machine is a fundamentally important duty before releasing the next version increment of ePages.
 
 ### Motivation
 
@@ -34,14 +34,14 @@ After careful consideration we determined that two non-functional requirements s
 
 ### Two Options
 
-At first glance we had two different ideas for our architectural solution approaches:
+At first glance we had two different ideas for our architectural solution approach:
 
 * **Option A:** Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
-* **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we could create a distrusted storage cluster with data mirroring.Test-driven development of the individual containers could be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
+* **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis and adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we should create a distributed storage cluster including mirroring for node data. Test-driven development of the individual containers should be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
 
-After a team-internal discussion we concluded that we want to implement **Option B** as it relied on recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing an own client especially for our use case scenario.
+After a team-internal discussion we concluded that we want to implement **Option B** as it relied on an recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing a custom-tailored client especially for our use case scenario.
 
-Furthermore considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
+Furthermore considering the ease of extension in the near future as well as a generally low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
 
 ## Implemented Solution
 
