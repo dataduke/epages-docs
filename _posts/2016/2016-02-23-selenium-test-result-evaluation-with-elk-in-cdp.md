@@ -49,7 +49,7 @@ To get the big picture for splitting the Scrum epic into several stories with ta
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
-As you can see above, several components of our infrastructure will be affected and also involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally a CDP run involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against a ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
+As you can see above, several components of our infrastructure will be affected and also involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally a CDP run involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against an ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
 
 After the test are run the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
 
@@ -136,7 +136,7 @@ if (![tags]) {
 if (![tags]) {
 
     if [env_identifier] != "zdt" {
-        # generate document logstash id from several esf fields
+        # generate elasticsearch document id from several esf fields
         fingerprint {
             target => "[@metadata][ES_DOCUMENT_ID]"
             source => ["epages_repo_id", "env_os", "env_type", "env_identifier", "browser", "class", "method"]
@@ -217,7 +217,7 @@ In such Jenkins jobs we added a separate build step where we first checked that 
 If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
 
 ```bash
-=== Start docker container [to-logstash-run-esf-tests-3829] from image [epages/to-logstash:wip] ===
+=== Start docker container [to-logstash-run-esf-tests-3829] from image [epages/to-logstash:latest] ===
 
 Process logs with pattern:          *esf*.json
 Mount log directory:                /home/jenkins/workspace/Run_ESF_tests/esf/esf-epages6-1.15.0-SNAPSHOT/log
@@ -260,6 +260,7 @@ Additionally, we also take advantage of three other usage scenarios:
 
 * the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
 * the usage via browser and search URI requests. It is important to note that the query string should contain
+
 	```bash
 	Schema:
 	<protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
@@ -267,9 +268,10 @@ Additionally, we also take advantage of three other usage scenarios:
 	Query String:
 	?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
 	```
+
 * the usage via curl and [Elasticsearch DSL simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
 
-## Summary and Discussion of Benefits
+## Discussion, Summary and Benefits
 
 Today the evaluation process is much faster and we do not have to connect to each machine or Jenkins job individually. Our Elasticsearch cluster provides redundancy and backups. This saves a lot of time and we can focus on the test failures. We learned a lot during the project, especially in the area of how to apply TDD with services encapsulated Docker Containers and of course about the Elasticsearch and Logstash area, as we test huge amount of plugins and configurations.
 
