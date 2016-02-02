@@ -246,9 +246,7 @@ For our elasticsearch docker cluster we setup a new Jenkins job, which ensured t
 
 At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex. It is possible to edit every single test object with client. Therefore the `note` can keep records on the cause for failures and corresponding JIRA case numbers, so that every unsuccessful test object is not just marked but also recorded.
 
-[comment]: <> ({% image /blog-elastichsearch-esf-client.png 25% left %}{% endimage %})
-
-![Elasticsearch UI Client](/assets/images/blog-elastichsearch-esf-client.png "Elasticsearch UI Client")
+![Elasticsearch UI Client](/assets/images/blog-selenium-test-result-evaluation-client.png "Elasticsearch UI Client")
 
 
 Additionally, we also take advantage of three other usage scenarios:
