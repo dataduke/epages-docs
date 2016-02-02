@@ -92,14 +92,110 @@ For the operation of the Elasticsearch in our continuous delivery pipeline we im
 We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these preparation steps several tests check if the elasticsearch service is reachable form outside the container and working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
 If a pull-reuest was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
 
-
 ### Part 3: Set up Logstash with Docker and CircleCi
 
-- forwarder = processor and shipper
-- describe transformation process
-- templating
-- input: esf-report.json, template-esf.json
-- output: logstash-info.json, logstash-error.json
+Within our architecture we use Logstash as a shipper and processor of our test results. It is needed to read, format and dispatch the information to our Elasticsearch instance. With the Logstash configuration file, it is possible to define the input and the output of Logstash, as well as how the data has to be filtered before transferring it to Elasticsearch. The input is given by a file path, which can also contain a regular expression. As described above, we use a JSON log file that is parsed by Logstash. The filter is able to add and remove fields from the JSON object. The output declares where the formatted message should be sent to. In our case this is configurable by environment variables, which will be explained below. 
+
+In the Logstash configuration, there is the possibility to use `if`-statements and environment variables. In addition to this, we decided to write our own templating engine based on the Jinja2 framework, because of the complexity of our desired format. This allows us to have an environment specific configuration for each VM the Docker Container is running on. To use this feature we forward some variables into our Container. Our entry point script renders the configuration templates and starts Logstash.
+
+```
+if (![tags]) { 
+    # add needed env variables to event
+    mutate {
+        add_field => {
+            "report_url" => "{{ ENV_URL }}%{test_url}"
+        }
+    }
+}
+
+###################################
+# Remove not needed source fields #
+###################################
+
+# only if no error tags were created
+if (![tags]) {
+
+    # remove not needed fields from extraction of message
+    mutate { remove_field => [ "host", "message", "path", "test_url", "@timestamp", "@version" ] }
+}
+
+######################
+# Create document id #
+######################
+
+# only if no error tags were created
+if (![tags]) {
+
+    if [env_identifier] != "zdt" {
+        # generate document logstash id from several esf fields
+        fingerprint {
+            target => "[@metadata][ES_DOCUMENT_ID]"
+            source => ["epages_repo_id", "env_os", "env_type", "env_identifier", "browser", "class", "method"]
+            concatenate_sources => true
+            key => "any-long-encryption-key"
+            method => "SHA1"    # return the same hash if all values of source fields are equal
+        }
+    } else {
+        # do not overwrite results for zdt environment identifier
+        fingerprint {
+            target => "[@metadata][ES_DOCUMENT_ID]"
+            source => ["epages_repo_id", "env_os", "env_type", "env_identifier", "browser", "class", "method", "report_url"]
+            concatenate_sources => true
+            key => "any-long-encryption-key"
+            method => "SHA1"    # return the same hash if all values of source fields are equal
+        }
+    }
+}
+```
+
+Above you can see an excerpt of the filter part of the configuration file. The first statement adds a new field `report_url` to the JSON object. Therefore, we concatenate an environment variable with a field that was defined in the original JSON object to obtain a complete URL. The second statement creates a fingerprint that will be added to a metadata field. The fingerprint will be created from the fields specified by the source key.
+
+```
+{%- if "elasticsearch" in LS_OUTPUT or "document" in LS_OUTPUT or "template" in LS_OUTPUT %}
+
+############################
+# Output for elasticsearch #
+############################
+
+# only if no error tags were created
+if (![tags]) {
+
+    # push esf events to elasticsearch
+    elasticsearch {
+
+       # set connection
+       hosts => {{ ES_HOSTS }}
+       
+       {%- if ES_USER and ES_PASSWORD %}
+       
+       # set credentials
+       user => "{{ ES_USER }}"
+       password => "{{ ES_PASSWORD }}"
+       {%- endif %}
+       
+       {%- if "elasticsearch" in LS_OUTPUT or "document" in LS_OUTPUT %}
+       
+       # set document path
+       index => "{{ ES_INDEX }}"
+       document_type => "{{ ES_DOCUMENT_TYPE }}"
+       document_id => "%{[@metadata][ES_DOCUMENT_ID]}"
+       {%- endif %}
+       
+       {%- if "elasticsearch" in LS_OUTPUT or "template" in LS_OUTPUT %}
+       
+       # use template for settings and mappings
+       manage_template => true
+       template => "{{ LS_CONFIG_VOL }}/template-esf.json"
+       template_name => "{{ ES_INDEX }}"
+       template_overwrite => true
+       {%- endif %}
+    }
+}
+{%- endif %}
+```
+This excerpt shows how we organize the output to Elasticsearch. The first line represents how we use our own templating engine. If the `if`-statement is `false`, the part configuring the output to Elasticsearch will be omitted. If it equals `true`, we use environment variables as well as information from our metadata for connection, document path and template settings. The same construct we use to implement the output on stdout, to an info log file and to an error log file.
+
+Another important point is testing our Logstash Container. We realized this with CircleCi. Every time a Pull Request is sent, CircleCi automatically tests these changes. We arranged two stages. On the first stage the Pull Request has to be reviewed and merged by a person into a dev branch. After this merge, CircleCi retests these changes. If the tests succeeds, the changes will be automatically merge into our master branch.
 
 ### Part 4: Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
 
@@ -186,3 +282,12 @@ You may follow me at [@dataduke](https://twitter.com/dataduke).
 - Also opted against pre-db like redis
 - choose most simplest approach to reduce complexity and gain stability
 - Task breakdown structure
+
+to part 3:
+
+- forwarder = processor and shipper
+- describe transformation process
+- templating
+- input: esf-report.json, template-esf.json
+- output: logstash-info.json, logstash-error.json
+
