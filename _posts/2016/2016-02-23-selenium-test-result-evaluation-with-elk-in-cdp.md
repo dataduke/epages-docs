@@ -39,15 +39,17 @@ At first glance we had two different ideas for our architectural solution approa
 * **Option A:** Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
 * **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis and adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we should create a distributed storage cluster including mirroring for node data. Test-driven development of the individual containers should be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
 
-After a team-internal discussion we concluded that we want to implement **Option B** as it relied on an recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing a custom-tailored client especially for our use case scenario.
+After a team-internal discussion we concluded that we want to implement **Option B** as it relied on a recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing a custom-tailored client especially for our use case scenario.
 
-Furthermore considering the ease of extension in the near future as well as a generally low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
+Furthermore considering the ease of extension in the near future as well as a generally low effort for maintenance we strongly opted against building every solution part on our own as suggested in **Option A**.
 
-## Implemented Solution
+## Blueprint of the Solution Architecture
 
-2 describing sentences to the blueprint of the architecture.
+To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first blueprint draft was sketched by hand and look similar to this:
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
+
+As you can see above, several parts of our infrastructure will be involved.
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
