@@ -15,7 +15,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 ## Background Story
 
-Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
+Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) (ESF) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
 In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each ePages CDP machine is a fundamentally important duty before releasing the next version increment of ePages.
 
@@ -49,7 +49,9 @@ To get the big picture for splitting the Scrum epic into several stories with ta
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
-As you can see above, several parts of our infrastructure will be involved.
+As you can see above, several components of our infrastructure will be affected and involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally it involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against a systems before patching has started (zero-down-time tests), so don't take the blueprint to literally.
+
+After the test are run the JSON logs should have been created inside every single jenkins job. As of now the tricky implementation of the project starts. We have devided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
