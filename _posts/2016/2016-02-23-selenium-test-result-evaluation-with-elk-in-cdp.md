@@ -108,7 +108,28 @@ In the Logstash configuration, there is the possibility to use `if`-statements a
 # Add source fields in desired order #
 ######################################
 
-if (![tags]) { 
+# only if no error tags were created
+if (![tags]) {
+
+    # add needed env variables to event
+    mutate {
+        add_field => {
+            "note" => ""
+            "epages_version" => "{{ EPAGES_VERSION }}"
+            "epages_repo_id" => "{{ EPAGES_REPO_ID }}"
+            "env_os" => "{{ ENV_OS }}"
+            "env_identifier" => "{{ ENV_IDENTIFIER }}"
+            "env_type" => "{{ ENV_TYPE }}"
+        }
+    }
+}
+
+# extract esf fields from message; the content wrapper
+json { source => "message" }
+
+# only if no error tags were created
+if (![tags]) {
+
     # add needed env variables to event
     mutate {
         add_field => {
