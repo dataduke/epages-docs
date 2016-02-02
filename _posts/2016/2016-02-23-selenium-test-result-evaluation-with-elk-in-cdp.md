@@ -47,7 +47,7 @@ Furthermore considering the ease of extension in the future as well as a low eff
 
 2 describing sentences to the blueprint of the architecture.
 
-![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint.png "Blueprint of the solution architecture")
+![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
