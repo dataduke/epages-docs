@@ -45,7 +45,7 @@ Furthermore considering the ease of extension in the near future as well as a ge
 
 ## Blueprint of the Solution Architecture
 
-To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first fdraft of the blueprint was sketched by hand and looked similar to this:
+To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
@@ -73,29 +73,29 @@ Our inital task consisted of the definiton of the desired target format for the 
     "method": "testDigitalTaxmatrixBasket",
     "runtime": "275",
     "report_url": "http://jenkins.intern.epages.de:8080/job/Run_ESF_tests/3778/artifact/esf/esf-epages6-1.15.0-SNAPSHOT/log/20160125T202150651Z/esf-test-reports/com/epages/cartridges/de_epages/tax/tests/DigitalTaxmatrixBasketTest/testDigitalTaxmatrixBasket/test-report.html",
-    "stacktrace": "org.openqa.selenium.TimeoutException: Timed out after 30 seconds waiting for presence of element located by: By.className: Saved Build info: version: '2.47.1', System info: host: 'ci-vm-ui-test-004', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '3.13.0-43-generic', java.version: '1.8.0_45-internal' Driver info: org.openqa.selenium.support.events.EventFiringWebDriver at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80) at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:491) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:468) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:451) at com.epages.cartridges.de_epages.coupon.pageobjects.mbo.ViewCouponCodes.createmanualCouponCode(ViewCouponCodes.java:159) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.setupCoupon(DigitalTaxmatrixBasketTest.java:882) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.testDigitalTaxmatrixBasket(DigitalTaxmatrixBasketTest.java:172)"                                                                                               
+    "stacktrace": "org.openqa.selenium.TimeoutException: Timed out after 30 seconds waiting for presence of element located by: By.className: Saved Build info: version: '2.47.1', System info: host: 'ci-vm-ui-test-004', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '3.13.0-43-generic', java.version: '1.8.0_45-internal' Driver info: org.openqa.selenium.support.events.EventFiringWebDriver at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80) at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:491) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:468) at com.epages.esf.controller.ActionBot.waitFor(ActionBot.java:451) at com.epages.cartridges.de_epages.coupon.pageobjects.mbo.ViewCouponCodes.createmanualCouponCode(ViewCouponCodes.java:159) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.setupCoupon(DigitalTaxmatrixBasketTest.java:882) at com.epages.cartridges.de_epages.tax.tests.DigitalTaxmatrixBasketTest.testDigitalTaxmatrixBasket(DigitalTaxmatrixBasketTest.java:172)"
 }
 ```
 
 Some information could be easily gathered by extending our TestReporter located in the core of our ePages selenium framework. Thus, we created a writer that could ouput log files containing single-line JSON test objects with the following fields: browser, pos, result, timestamp, test, class, method, runtime and the stacktrace. 
 
-All other fields cannot be derived from our test suite itself and therefore need to be enriched at the processing step in the pipeline. We will discuss these ingredients of the test object in the following logstash chapter.
+All other fields cannot be derived from our test suite itself and therefore need to be enriched at the processing step in the pipeline. We will discuss these ingredients of the test object in the chapter about Logstash.
 
 ### Part 2: Set up Elasticsearch with Docker and CircleCi
 
 **Dockerfile**
 
-We decided to run [Elasticsearch](https://www.elastic.co/products/elasticsearch) from within an effortlessly deployable and stable docker container. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the *Dockerfile* we synced our timezone, prepared templating with [Jinja](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and a REST-console. We needed to create and use our own *docker-entrypoint* script as we wanted to map a few host directories to more docker volumes than suggested by the base image.
+We decided to run the nodes of the [Elasticsearch](https://www.elastic.co/products/elasticsearch) cluster within effortlessly deployable docker containers. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the `Dockerfile` we synced our timezone, prepared templating with [Jinja](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and an extensive REST-console. We needed to create and use our own `docker-entrypoint` script as we wanted to map a few more docker host directories than suggested by the official base image.
 
 **Configuration**
 
-Besides using variables in the configuration and logging files of Elasticsearch the setup was quite straight forward. We reduced complexity via a bash script allowing to build the docker image and start the container. The script support the setting of the needed variables for the configuration files and hands them over into the running docker container. 
-For the operation of the Elasticsearch in our continuous delivery pipeline we implemented a verbose mode in the external bash script as well as the docker-entrypoint script so that we could follow each step in the console ouput.
+Besides using variables in the configuration and logging files of Elasticsearch the setup process was quite straight forward. We reduced complexity via a bash script allowing to build the docker image and start the container. The start script supports the setting of the needed environment variables for the configuration files and hands them over into the docker container at runtime. 
+For the daily operation of the Elasticsearch cluster we implemented a verbose mode in the start script as well as in the `docker-entrypoint` script so that we could monitor each step in the console ouput.
 
 **Testing**
 
-We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these preparation steps several tests check if the elasticsearch service is reachable form outside the container and working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
-If a pull-reuest was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
+We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these described preparation steps several tests check if the elasticsearch service is reachable form outside the container and is working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
+If a pull-request was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
 
 ### Part 3: Set up Logstash with Docker and CircleCi
 
