@@ -43,7 +43,7 @@ After a team-internal discussion we concluded that we want to implement **Option
 
 Furthermore considering the ease of extension in the near future as well as a generally low effort for maintenance we strongly opted against building every solution part on our own as suggested in **Option A**.
 
-## Blueprint of the Solution Architecture
+## Implemented Solution
 
 To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
@@ -85,7 +85,7 @@ All other fields cannot be derived from our test suite itself and therefore need
 
 **Dockerfile**
 
-We decided to run the nodes of the [Elasticsearch](https://www.elastic.co/products/elasticsearch) cluster within effortlessly deployable docker containers. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the `Dockerfile` we synced our timezone, prepared templating with [Jinja](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and an extensive REST-console. We needed to create and use our own `docker-entrypoint` script as we wanted to map a few more docker host directories than suggested by the official base image.
+We decided to run the nodes of the [Elasticsearch](https://www.elastic.co/products/elasticsearch) cluster within effortlessly deployable docker containers. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the `Dockerfile` we synced our timezone, prepared templating with [Jinja2](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and an extensive REST-console. We needed to create and use our own `docker-entrypoint` script as we wanted to map a few more docker host directories than suggested by the official base image.
 
 **Configuration**
 
@@ -104,6 +104,10 @@ Within our architecture we use Logstash as a shipper and processor of our test r
 In the Logstash configuration, there is the possibility to use `if`-statements and environment variables. In addition to this, we decided to write our own templating engine based on the Jinja2 framework, because of the complexity of our desired format. This allows us to have an environment specific configuration for each VM the Docker Container is running on. To use this feature we forward some variables into our Container. Our entry point script renders the configuration templates and starts Logstash.
 
 ```
+######################################
+# Add source fields in desired order #
+######################################
+
 if (![tags]) { 
     # add needed env variables to event
     mutate {
