@@ -9,7 +9,7 @@ authors: ["Benjamin Nothdurft", "Bastian Klein"]
 
 [comment]: <> (Teaser)
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the background information of the project, the general ideas of the implemented solution and discuss the pragmatic benefits for our company. 
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share the background information of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and the speed of massive test evaluation. 
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
@@ -17,7 +17,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. Before releasing the next version increment of ePages the evaluation of all test results from each epages machine is very important.
+In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each epages machine is a fundamentally important duty before releasing the next version increment of ePages.
 
 ### Motivation
 
