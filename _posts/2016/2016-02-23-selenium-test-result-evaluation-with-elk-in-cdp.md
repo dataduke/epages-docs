@@ -39,8 +39,9 @@ At first glance we had two different ideas for our architectural solution approa
 * **Option A:** Custom python scripts at the end of a Selenium Jenkins job should transfer the test results from a pipeline machine into a dedicated single MySQL database. Another script or a custom frontend should then retrieve all test results from the database at the end of a whole pipeline run and display them in an usable fashion.
 * **Option B:** Use the popular ELK-stack (Elasticsearch, Logstash, Kibana) as a basis, adapted it to fit our test results. Each part should be thrown in decoupled, independent docker containers. For scaleability we could create a distrusted storage cluster with data mirroring.Test-driven development of the individual containers could be achieved with CircleCi and - after success - the containers can be pushed to our docker registry. In the end the pipeline could pull the containers on-time and run them with a dedicated configuration for each Jenkins job.
 
-After a team-internal discussion we concluded that we want to implement **Option B** as it relied on a recently established technology stack which got quite a lot of attention in terms of large-scale and high-performance system log monitoring.
-Additionally considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
+After a team-internal discussion we concluded that we want to implement **Option B** as it relied on recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing an own client especially for our use case scenario.
+
+Furthermore considering the ease of extension in the future as well as a low effort for maintenance of the implemented solution we strongly opted against building every solution part on our own as suggested in **Option A**.
 
 ## Implemented Solution
 
@@ -243,24 +244,30 @@ For our elasticsearch docker cluster we setup a new Jenkins job, which ensured t
 
 ### Part 5: Set up Elasticsearch UI Client to Evaluate Test Results
 
-At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex.
+At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex. It is possible to edit every single test object with client. Therefore the `note` can keep records on the cause for failures and corresponding JIRA case numbers, so that every unsuccessful test object is not just marked but also recorded.
 
 ![Elasticsearch UI Client](/path/to/img.jpg "Elasticsearch UI Client")
 
-We also support three other use cases:
 
-* the head plugin for elasticsearch.
-* the usage via browser and search URI requests, e.g. 
-* (https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
+Additionally, we also take advantage of three other usage scenarios:
+
+* the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
+* the usage via browser and search URI requests. It is important to note that the query string should contain
+	```bash
+	Schema:
+	<protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
+	<protocol>:/<domain>:<port>/<index>/<document_type>/_search?=<query_string>
+	Query String:
+	?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
+	```
+* the usage via curl and [Elasticsearch DSL simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
 
 
 ## Summary and Discussion of Benefits
 
-- evaluation is much faster, do not have to connect to each job seperatly
-- failures are also found much faster, but directly connecting to the cluster.
-- Redundancy option by elasticsearch, nothing gets lost.
-- A lot of learnings in the ELK area.
-- Quiet satisfied with solution.
+Today the evaluation process is much faster and we do not have to connect to each machine or Jenkins job individually. Our Elasticsearch cluster provides redundancy and backups. This saves a lot of time and we can focus on the test failures. We learned a lot during the project, especially in the area of how to apply TDD with services encapsulated Docker Containers and of course about the Elasticsearch and Logstash area, as we test huge amount of plugins and configurations.
+
+Overall we are quiet satisfied with solution.
 
 ## Author
 
