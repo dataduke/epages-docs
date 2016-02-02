@@ -45,13 +45,13 @@ Furthermore considering the ease of extension in the near future as well as a ge
 
 ## Blueprint of the Solution Architecture
 
-To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first blueprint draft was sketched by hand and look similar to this:
+To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first fdraft of the blueprint was sketched by hand and looked similar to this:
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
-As you can see above, several components of our infrastructure will be affected and involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally it involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against a systems before patching has started (zero-down-time tests), so don't take the blueprint to literally.
+As you can see above, several components of our infrastructure will be affected and also involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally a CDP run involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against a ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
 
-After the test are run the JSON logs should have been created inside every single jenkins job. As of now the tricky implementation of the project starts. We have devided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
+After the test are run the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
