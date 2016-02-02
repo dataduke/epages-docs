@@ -47,11 +47,11 @@ Furthermore considering the ease of extension in the future as well as a low eff
 
 2 describing sentences to the blueprint of the architecture.
 
-![Blueprint of the Architecture](/path/to/img.jpg "Blueprint of the Architecture")
+![Blueprint of the implemented architecture](/assets/images/blog-selenium-test-result-evaluation-architecture.png "Blueprint of the implemented architecture")
 
 ### Part 1: Define Test Object and Extend Test Suite Reporter
 
-Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in Elasticsearch as JSON documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
+Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in Elasticsearch as [JSON](http://www.json.org/) documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
 
 ```JSON
 {
@@ -248,7 +248,6 @@ At the current state the ESClient is the analyzation tool of choice. Here you ca
 
 ![Elasticsearch UI Client](/assets/images/blog-selenium-test-result-evaluation-client.png "Elasticsearch UI Client")
 
-
 Additionally, we also take advantage of three other usage scenarios:
 
 * the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
@@ -267,10 +266,6 @@ Additionally, we also take advantage of three other usage scenarios:
 Today the evaluation process is much faster and we do not have to connect to each machine or Jenkins job individually. Our Elasticsearch cluster provides redundancy and backups. This saves a lot of time and we can focus on the test failures. We learned a lot during the project, especially in the area of how to apply TDD with services encapsulated Docker Containers and of course about the Elasticsearch and Logstash area, as we test huge amount of plugins and configurations.
 
 Overall we are quiet satisfied with solution.
-
-## Author
-
-You may follow me at [@dataduke](https://twitter.com/dataduke).
 
 ## Writing Tasks
 
