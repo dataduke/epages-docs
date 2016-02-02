@@ -208,11 +208,11 @@ In such Jenkins jobs we added a separate build step where we first checked that 
 If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
 
 ```bash
-==== Start logstash docker container [to-logstash-esf_integration_run_on_non-windows_slaves-SEARCH-linux-1511] ===
+=== Start docker container [to-logstash-run-esf-tests-3829] from image [epages/to-logstash:wip] ===
 
 Process logs with pattern:          *esf*.json
-Mount log directory:                /home/jenkins/jenkins/workspace/esf_integration_run_on_non-windows_slaves/browser/firefox/groups_to_test/SEARCH/operating_system/linux/esf/esf-epages6-1.15.0-SNAPSHOT/log
-Mount config directory:             /home/jenkins/jenkins/workspace/esf_integration_run_on_non-windows_slaves/browser/firefox/groups_to_test/SEARCH/operating_system/linux/to-logstash/config
+Mount log directory:                /home/jenkins/workspace/Run_ESF_tests/esf/esf-epages6-1.15.0-SNAPSHOT/log
+Mount config directory:             /home/jenkins/workspace/Run_ESF_tests/to-logstash/config
 Set logstash input types:           log,esf
 Set logstash output types:          log,elasticsearch
 Use logstash env file:              env-esf.list
@@ -221,8 +221,18 @@ Use info log file:                  logstash-info.json
 Use error log file:                 logstash-error.json
 Use elasticsearch template file:    template-esf.json
 Set elasticsearch hosts:            [ 'cd-vm-docker-host-001.intern.epages.de:9200' ]
-Set elasticsearch index:            esf-build-ui-tests
-Set elasticsearch document type:    1511
+Set elasticsearch index:            esf-cdp-ui-tests
+Set elasticsearch document type:    6.17.40
+
+--- Start configuration is applied.
+
+a8fa29d74ef97832fcfbc3a0722b728a465244263c9d482b6eec6357d184555b
+
+=== No need to stop not running docker container [to-logstash-run-esf-tests-3829] ===
+
+=== Remove existing docker container [to-logstash-run-esf-tests-3829] ===
+
+to-logstash-run-esf-tests-3829
 ```
 
 All shipped test-objects are saved to a logstash info log, which is archived as build artifact in the clean-up section of Jenkins.
@@ -233,9 +243,11 @@ For our elasticsearch docker cluster we setup a new Jenkins job, which ensured t
 
 ### Part 5: Set up Elasticsearch UI Client to Evaluate Test Results
 
-- Viewer
-- Rest-Client
-- Head-Plugin
+At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex.
+
+We also defined the usage voa browaser and search URI requests. 
+
+![Elasticsearch UI Client](/path/to/img.jpg "Elasticsearch UI Client")
 
 ## Summary and Discussion of Benefits
 
