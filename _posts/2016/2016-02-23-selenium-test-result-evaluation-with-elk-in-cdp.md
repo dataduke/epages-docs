@@ -304,22 +304,24 @@ Besides the in-depth exploration of the ELK ecosystem, which goes way beyond thi
 
 Overall we are very happy with the outcome of this project and hope we can spend all the freed up time on other awesome projects about which we can write more interesting blog posts.
 
-## Review Tasks
+## Before Review Tasks
 
-- [ ] paragraph: Introduction and motivation
-- [ ] paragraph: Problem-Solving-Process
-- [ ] paragraph: Solution approach
-- [ ] paragraph: Implementation 
+- [x] paragraph: Teaser
+- [x] paragraph: Background Story
+- [x] paragraph: Motivation
+- [x] paragraph: Requirements
+- [x] paragraph: Two Options
+- [x] paragraph: Implementation 
 - [ ] picture: Blueprint
-- [ ] paragraph: Step 1: Extend test suite reporting
-- [ ] listing: Test data structure
-- [ ] paragraph: Step 2: Set up elasticsearch
+- [x] paragraph: Step 1: Extend test suite reporter
+- [x] listing: Test data structure
+- [x] paragraph: Step 2: Set up elasticsearch
 - [ ] paragraph: Step 3: Set up logstash
-- [ ] listing: Test object transformation
+- [x] listings: Test object transformation
 - [ ] paragraph: Step 4: Integrate solution in continuous delivery pipeline
-- [ ] paragraph: Step 5: Usage
-- [ ] image: ESClient
-- [ ] paragraph: Summary
+- [x] paragraph: Step 5: Usage
+- [x] image: Elasticsearch Client
+- [x] paragraph: Summary
 
 ## Notes
 
