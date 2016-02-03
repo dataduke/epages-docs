@@ -53,7 +53,7 @@ As you can see above, several components of our infrastructure will be affected 
 
 After the test are run the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
 
-### Part 1: Define Test Object and Extend Test Suite Reporter
+### Part 1: Define the Test Object and Extend the Test Suite Reporter
 
 Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in Elasticsearch as [JSON](http://www.json.org/) documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
 
@@ -227,7 +227,7 @@ This excerpt shows how we organize the output to Elasticsearch. The first line r
 
 Another important point is testing our Logstash Container. We realized this with CircleCi. Every time a Pull Request is sent, CircleCi automatically tests these changes. We arranged two stages. On the first stage the Pull Request has to be reviewed and merged by a person into a dev branch. After this merge, CircleCi retests these changes. If the tests succeeds, the changes will be automatically merge into our master branch.
 
-### Part 4: Integrate Docker Containers in Jenkins
+### Part 4: Integrate Docker Containers in Pipeline with Jenkins
 
 **Logstash**
 
