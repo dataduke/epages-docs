@@ -233,9 +233,7 @@ Another important point is testing our Logstash Container. We realized this with
 
 We have several pipeline jobs that run the test suite of the ePages selenium framework on all ePages environment machines. As a result they produce a single log file with the JSON test objects as described in part 1. The test suite is configured to always append new objects so that it doesn't matter if the test suite is invoked in a matrix job, with several test groups in parallel or with a retry option for aborted test if thirdparty sandboxes fail. 
 
-In such Jenkins jobs we added a separate build step where we first checked that all needed environment variables were used. 
-
-If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
+In such Jenkins jobs we added a separate build step where we first checked that all needed environment variables were used. If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
 
 ```bash
 === Start docker container [to-logstash-run-esf-tests-3829] from image [epages/to-logstash:latest] ===
@@ -244,7 +242,7 @@ Process logs with pattern:          *esf*.json
 Mount log directory:                /home/jenkins/workspace/Run_ESF_tests/esf/esf-epages6-1.15.0-SNAPSHOT/log
 Mount config directory:             /home/jenkins/workspace/Run_ESF_tests/to-logstash/config
 Set logstash input types:           log,esf
-Set logstash output types:          log,elasticsearch
+Set logstash output types:          log,elasticsearch,verbose
 Use logstash env file:              env-esf.list
 Use logstash conf file:             logstash-esf.conf
 Use info log file:                  logstash-info.json
@@ -269,51 +267,57 @@ All shipped test-objects are saved to a logstash info log, which is archived as 
 
 **Elasticsearch**
 
-For our elasticsearch docker cluster we setup a new Jenkins job, which ensured that always the latest version of our container is running. We made sure to mount several host directories so that the elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots.
+For our elasticsearch docker cluster we configured a new Jenkins job, which ensured that always the latest version of our image is used. We made sure to mount several host directories so that the elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots. By firing up multiple elasticsearch node containers containing to the same cluster we achived load-balance and shard redudandcy.
 
 ### Part 5: Set up Elasticsearch UI Client to Evaluate Test Results
 
-At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the epages repo id. You can then narrow down the search with simple match search field (e.g. only show results with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which support boolean operators, range matchers and more advanced features, similar to a regex. It is possible to edit every single test object with client. Therefore the `note` can keep records on the cause for failures and corresponding JIRA case numbers, so that every unsuccessful test object is not just marked but also recorded.
+At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore the `note` field keeps entries about the causes for test failures with corresponding JIRA ticket numbers, so that every unsuccessful test object is not just marked but also recorded.
 
 ![View Tests in Client](/assets/images/blog-selenium-test-result-evaluation-client-red.png "View Tests in Client")
 
-Additionally, we also take advantage of three other usage scenarios:
+Additionally, we also take advantage of three other ways to access our elasticsearch cluster:
 
-* the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
-* the usage via browser and search URI requests. It is important to note that the query string should contain
+* via the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
+* via curl and [Elasticsearch DSL simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
+* via search URI requests in the location bar in the browser, e.g:
 
-	```bash
-	Schema:
-	<protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
-	<protocol>:/<domain>:<port>/<index>/<document_type>/_search?=<query_string>
-	Query String:
-	?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
-	```
-
-* the usage via curl and [Elasticsearch DSL simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
+```bash
+Schema:
+<protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
+<protocol>:/<domain>:<port>/<index>/<document_type>/_search?=<query_string>
+Query String:
+?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
+```
 
 ## Discussion, Summary and Benefits
 
-Today the evaluation process is much faster and we do not have to connect to each machine or Jenkins job individually. Our Elasticsearch cluster provides redundancy and backups. This saves a lot of time and we can focus on the test failures. We learned a lot during the project, especially in the area of how to apply TDD with services encapsulated Docker Containers and of course about the Elasticsearch and Logstash area, as we test huge amount of plugins and configurations.
+Today the evaluation process is much faster – speaking of less than 5 minutes a day as we do not have to connect to each machine or Jenkins job individually. The tremendous amount of saved time can be used for other pipline projects or when in need we can focus on debugging of the test failures. 
 
-Overall we are quiet satisfied with solution.
+Besides the in-depth exploration of the ELK ecosystem, which goes way beyond this short article, we also learned a lot of useful craftsmanship skills:
 
-## Writing Tasks
+* how to apply TDD to Docker container with encapsulated services.
+* how to write infrastructure as code.
+* how to run a CircleCi job effectivly on parallel nodes if multiple ones are availible.
+* how to enjoy long pair-programming sessions, but also when to quickly switch back to seperate desks.
 
-- [x] Add paragraph: Introduction and motivation
-- [x] Add paragraph: Problem-Solving-Process
-- [x] Add paragraph: Solution approach
-- [ ] Add paragraph: Implementation 
-- [ ] Add picture: Solution draft
-- [x] Add paragraph: Step 1: Extend test suite reporting
-- [ ] Add snippet: Test data structure
-- [ ] Add paragraph: Step 2: Set up elasticsearch
-- [ ] Add paragraph: Step 3: Set up logstash
-- [ ] Add snippet: Test data transformation
-- [ ] Add paragraph: Step 4: Integrate solution in continuous delivery pipeline
-- [ ] Add paragraph: Step 5: Usage
-- [ ] Add picture: Test data in database and clients
-- [ ] Add paragraph: Summary
+Overall we are very happy with the outcome of this project and hope we can spend all the freed up time on other awesome projects about which we can write more interesting blog posts.
+
+## Review Tasks
+
+- [ ] paragraph: Introduction and motivation
+- [ ] paragraph: Problem-Solving-Process
+- [ ] paragraph: Solution approach
+- [ ] paragraph: Implementation 
+- [ ] picture: Blueprint
+- [ ] paragraph: Step 1: Extend test suite reporting
+- [ ] listing: Test data structure
+- [ ] paragraph: Step 2: Set up elasticsearch
+- [ ] paragraph: Step 3: Set up logstash
+- [ ] listing: Test object transformation
+- [ ] paragraph: Step 4: Integrate solution in continuous delivery pipeline
+- [ ] paragraph: Step 5: Usage
+- [ ] image: ESClient
+- [ ] paragraph: Summary
 
 ## Notes
 
@@ -322,18 +326,14 @@ Overall we are quiet satisfied with solution.
 - old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.
 - old: Pipeline with Continous delivery
 - old: Test results from various environments
-
 - 2 Lösungsansätze: eigeneDB e.g. MySQL mit Scripten (A) vs Elasticsearch, Logstash plus Kibana (B)
 - A: needs database schema and maintenance of it, less flexibilty
 - B: Perspektive Logsauswertung in pipeline, Learn use of ELK as some providers use it for sys logs on live systems
-
 - After careful evaluation of XYZ
 - Also opted against pre-db like redis
 - choose most simplest approach to reduce complexity and gain stability
 - Task breakdown structure
-
 to part 3:
-
 - forwarder = processor and shipper
 - describe transformation process
 - templating
