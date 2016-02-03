@@ -293,14 +293,14 @@ Query String:
 
 ## Discussion, Summary and Benefits
 
-Today the evaluation process is much faster – speaking of less than 5 minutes a day as we do not have to connect to each machine or Jenkins job individually. The tremendous amount of saved time can be used for other pipline projects or when in need we can focus on debugging of the test failures. 
+Today the evaluation process is much faster – speaking of less than 5 minutes a day. The tremendous amount of saved time can be used for other pipline projects or when in need we can focus on debugging of the test failures. 
 
 Besides the in-depth exploration of the ELK ecosystem, which goes way beyond this short article, we also learned a lot of useful craftsmanship skills:
 
-* how to apply TDD to Docker container with encapsulated services.
-* how to write infrastructure as code.
-* how to run a CircleCi job effectivly on parallel nodes if multiple ones are availible.
-* how to enjoy long pair-programming sessions, but also when to quickly switch back to seperate desks.
+* How to apply TDD to Docker container with encapsulated services.
+* How to write infrastructure as code.
+* How to run a CircleCi job effectivly on parallel nodes if multiple ones are availible.
+* How to enjoy long pair-programming sessions, but also when to quickly switch back to seperate desks.
 
 Overall we are very happy with the outcome of this project and hope we can spend all the freed up time on other awesome projects about which we can write more interesting blog posts.
 
