@@ -3,13 +3,13 @@ layout: post
 title: "Optimised Collection and Evaluation of Selenium UI Test Result Data for Multiple Environments in the epages Continuous Delivery Pipeline"
 date: "2016-02-23 10:47:30"
 icon: wrench
-categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
+categories: tech-stories selenium testing elk cdp Elasticsearch logstash continuous-delivery
 authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
 [comment]: <> (Teaser)
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline (CDP). Today we want to share  with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation. 
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline (CDP). Today we want to share with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
@@ -17,7 +17,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) (ESF) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated integration tests for each feature to safeguard the functionality of every cartridge (software module). 
 
-In our continuous delivery pipeline we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each ePages CDP machine is a fundamentally important duty before releasing the next version increment of ePages.
+In our continuous delivery pipeline (CDP) we run all these provided tests in various sets on every possible type of ePages environment, which is freshly installed or patched to the latest release candidate. The evaluation of all test results from each ePages CDP machine is a fundamentally important duty before releasing the next version increment of ePages.
 
 ### Motivation
 
@@ -41,21 +41,21 @@ At first glance we had two different ideas for our architectural solution approa
 
 After a team-internal discussion we concluded that we want to implement **Option B** as it relied on a recently established ecosystem which got quite a lot of attention in terms of large-scale and high-performance system log monitoring. Like other key-value stores Elasticsearch supports a very flexible document structure, which does not need any database schema, and on top all documents could also be retrieved via simple REST calls, which leaves room for developing a custom-tailored client especially for our use case scenario.
 
-Furthermore considering the ease of extension in the near future as well as a generally low effort for maintenance we strongly opted against building every solution part on our own as suggested in **Option A**.
+Furthermore, considering the ease of extension in the near future as well as a generally low effort for maintenance we strongly opted against building every solution part on our own as suggested in **Option A**.
 
 ## Implemented Solution
 
-To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criterias we created a visualization, which could prescindly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
+To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criteria we created a visualization, which could presciently highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
-As you can see above, several components of our infrastructure will be affected and also involved throughout the devlopment of this project. The middle tier shows the interdigitation of our pipline. Usally a CDP run involves several prepare jobs; then a hugh amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against an ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
+As you can see above, several components of our infrastructure will be affected and also involved throughout the development of this project. The middle tier shows the interdigitation of our pipeline. Usually a CDP run involves several prepare jobs; then a huge amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against an ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
 
-After the test are run the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain you each step-by-step. 
+After the test are run, the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain you each step-by-step.
 
 ### Part 1: Define the Test Object and Extend the Test Suite Reporter
 
-Our inital task consisted of the definiton of the desired target format for the individual test objects, which would later be stored in Elasticsearch as [JSON](http://www.json.org/) documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
+Our initial task consisted of the definition of the desired target format for the individual test objects, which would later be stored in Elasticsearch as [JSON](http://www.json.org/) documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be later on easier displayed by several client interfaces of Elasticsearch.
 
 ```JSON
 {
@@ -77,7 +77,7 @@ Our inital task consisted of the definiton of the desired target format for the 
 }
 ```
 
-Some information could be easily gathered by extending our TestReporter located in the core of our ePages selenium framework. Thus, we created a writer that could ouput log files containing single-line JSON test objects with the following fields: browser, pos, result, timestamp, test, class, method, runtime and the stacktrace. 
+Some information could be easily gathered by extending our TestReporter located in the core of our ePages selenium framework. Thus, we created a writer that could output log files containing single-line JSON test objects with the following fields: browser, pos, result, timestamp, test, class, method, runtime and the stacktrace. 
 
 All other fields cannot be derived from our test suite itself and therefore need to be enriched at the processing step in the pipeline. We will discuss these ingredients of the test object in the chapter about Logstash.
 
@@ -85,17 +85,17 @@ All other fields cannot be derived from our test suite itself and therefore need
 
 **Dockerfile**
 
-We decided to run the nodes of the [Elasticsearch](https://www.elastic.co/products/elasticsearch) cluster within effortlessly deployable docker containers. To keep the entire setup at a reasonable level the reuse of the [offical base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the `Dockerfile` we synced our timezone, prepared templating with [Jinja2](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabluar document view and an extensive REST-console. We needed to create and use our own `docker-entrypoint` script as we wanted to map a few more docker host directories than suggested by the official base image.
+We decided to run the nodes of the [Elasticsearch](https://www.elastic.co/products/elasticsearch) cluster within effortlessly deployable docker containers. To keep the entire setup at a reasonable level the reuse of the [official base image](https://hub.docker.com/_/elasticsearch/) was very helpful. In the `Dockerfile` we synced our timezone, prepared templating with [Jinja2](http://jinja.pocoo.org/docs/dev/) and installed several plugins for HTTP authorization and [administration](https://github.com/mobz/elasticsearch-head) via a web frontend that included a tabular document view and an extensive REST-console. We needed to create and use our own `docker-entrypoint` script as we wanted to map a few more docker host directories than suggested by the official base image.
 
 **Configuration**
 
 Besides using variables in the configuration and logging files of Elasticsearch the setup process was quite straight forward. We reduced complexity via a bash script allowing to build the docker image and start the container. The start script supports the setting of the needed environment variables for the configuration files and hands them over into the docker container at runtime. 
-For the daily operation of the Elasticsearch cluster we implemented a verbose mode in the start script as well as in the `docker-entrypoint` script so that we could monitor each step in the console ouput.
+For the daily operation of the Elasticsearch cluster we implemented a verbose mode in the start script as well as in the `docker-entrypoint` script so that we could monitor each step in the console output.
 
 **Testing**
 
-We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these described preparation steps several tests check if the elasticsearch service is reachable form outside the container and is working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
-If a pull-request was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful circleci job runs – the deployment of the docker image to our docker registry is triggered.
+We versioned the entire source code on [GitHub](https://github.com/). The first file we added was the configuration file for the CircleCi job. The job basically checks-out the repository and tries to build and run the docker container. After these described preparation steps several tests check if the Elasticsearch service is reachable form outside the container and is working as expected. With this setup we could securely develop the Dockerfile and the Elasticsearch configuration files against the previously created tests. 
+If a pull-request was reviewed and merged into the dev branch of the upstream repository an auto-merge-script pushed the dev code to the master branch. In the master branch – after 3 successful CircleCi job runs – the deployment of the docker image to our docker registry is triggered.
 
 ### Part 3: Set up Logstash with Docker and CircleCi
 
@@ -223,7 +223,7 @@ if (![tags]) {
 }
 {%- endif %}
 ```
-This excerpt shows how we organize the output to Elasticsearch. The first line represents how we use our own templating engine. If the `if`-statement is `false`, the part configuring the output to Elasticsearch will be omitted. If it equals `true`, we use environment variables as well as information from our metadata for connection, document path and template settings. The same construct we use to implement the output on stdout, to an info log file and to an error log file.
+This excerpt shows how we organize the output to Elasticsearch. The first line represents how we use our own templating engine. If the `if`-statement is `false`, the part configuring the output to Elasticsearch will be omitted. If it equals `true`, we use environment variables as well as information from our metadata for connection, document path and template settings. The same construct we used to implement the output on stdout, to an info log file and to an error log file.
 
 Another important point is testing our Logstash Container. We realized this with CircleCi. Every time a Pull Request is sent, CircleCi automatically tests these changes. We arranged two stages. On the first stage the Pull Request has to be reviewed and merged by a person into a dev branch. After this merge, CircleCi retests these changes. If the tests succeeds, the changes will be automatically merge into our master branch.
 
@@ -269,15 +269,15 @@ All shipped test-objects are saved to a logstash info log, which is archived as 
 
 **Elasticsearch**
 
-For our elasticsearch docker cluster we configured a new Jenkins job, which ensured that always the latest version of our image is used. We made sure to mount several host directories so that the elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots. By firing up multiple elasticsearch node containers containing to the same cluster we achived load-balance and shard redudandcy.
+For our Elasticsearch docker cluster we configured a new Jenkins job, which ensured that always the latest version of our image is used. We made sure to mount several host directories so that the Elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots. By firing up multiple Elasticsearch node containers containing to the same cluster we archived load-balance and shard redundandcy.
 
 ### Part 5: Use the Elasticsearch Client to Evaluate Test Results
 
-At the current state our Elasticsearch client is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore the `note` field keeps entries about the causes for test failures with corresponding JIRA ticket numbers, so that every unsuccessful test object is not just marked but also recorded.
+At the current state our Elasticsearch client is the analysis tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field keeps entries about the causes for test failures with corresponding JIRA ticket numbers, so that every unsuccessful test object is not just marked but also recorded.
 
 ![View Tests in Client](/assets/images/blog-selenium-test-result-evaluation-client-red.png "View Tests in Client")
 
-Additionally, we also take advantage of three other ways to access our elasticsearch cluster:
+Additionally, we also take advantage of three other ways to access our Elasticsearch cluster:
 
 * via the [elasticsearch head](https://github.com/mobz/elasticsearch-head) plugin.
 * via curl and [Elasticsearch DSL simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
@@ -293,14 +293,14 @@ Query String:
 
 ## Discussion, Summary and Benefits
 
-Today the evaluation process is much faster – speaking of less than 5 minutes a day. The tremendous amount of saved time can be used for other pipline projects or when in need we can focus on debugging of the test failures. 
+Today the evaluation process is much faster – speaking of less than 5 minutes a day. The tremendous amount of saved time can be used for other pipeline projects or when in need we can focus on debugging of the test failures. 
 
 Besides the in-depth exploration of the ELK ecosystem, which goes way beyond this short article, we also learned a lot of useful craftsmanship skills:
 
 * How to apply TDD to Docker container with encapsulated services.
 * How to write infrastructure as code.
-* How to run a CircleCi job effectivly on parallel nodes if multiple ones are availible.
-* How to enjoy long pair-programming sessions, but also when to quickly switch back to seperate desks.
+* How to run a CircleCi job effectively on parallel nodes if multiple ones are available.
+* How to enjoy long pair-programming sessions, but also when to quickly switch back to separate desks.
 
 Overall we are very happy with the outcome of this project and hope we can spend all the freed up time on other awesome projects about which we can write more interesting blog posts.
 
@@ -315,7 +315,7 @@ Overall we are very happy with the outcome of this project and hope we can spend
 - [ ] picture: Blueprint
 - [x] paragraph: Step 1: Extend test suite reporter
 - [x] listing: Test data structure
-- [x] paragraph: Step 2: Set up elasticsearch
+- [x] paragraph: Step 2: Set up Elasticsearch
 - [ ] paragraph: Step 3: Set up logstash
 - [x] listings: Test object transformation
 - [ ] paragraph: Step 4: Integrate solution in continuous delivery pipeline
@@ -325,7 +325,7 @@ Overall we are very happy with the outcome of this project and hope we can spend
 
 ## Notes
 
-- old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and elasticsearch with the help of docker, circleci and jenkins.
+- old: Log/Report evaluation of selenium ui test results in a continuous delivery pipeline using logstash and Elasticsearch with the help of docker, CircleCi and jenkins.
 - old: fail for the next version of epages so that our plattform can be rolled out with zero-downtime and no errors to our providers in every operation scenario.
 - old: Automated GUI Testing has evolved to a reputable standard at ePages. A software engineer who is responsible for implementing a new feature or even develops a complete cartridge not even writes a lot of unit tests but also secures the functionality by adding appropriate integration tests with our ePages Selenium Framework.
 - old: Pipeline with Continous delivery
