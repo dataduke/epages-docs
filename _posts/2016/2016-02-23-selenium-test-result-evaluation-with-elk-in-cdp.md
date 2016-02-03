@@ -286,7 +286,7 @@ Additionally, we also take advantage of three other ways to access our elasticse
 ```bash
 Schema:
 <protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
-<protocol>:/<domain>:<port>/<index>/<document_type>/_search?=<query_string>
+<protocol>://<domain>:<port>/<index>/<document_type>/_search?=<query_string>
 Query String:
 ?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
 ```
