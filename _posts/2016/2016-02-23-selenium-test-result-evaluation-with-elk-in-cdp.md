@@ -3,13 +3,13 @@ layout: post
 title: "Optimised Collection and Evaluation of Selenium UI Test Result Data for Multiple Environments in the epages Continuous Delivery Pipeline"
 date: "2016-02-23 10:47:30"
 icon: wrench
-categories: tech-stories selenium testing elk cdp Elasticsearch logstash continuous-delivery
+categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
 authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
 [comment]: <> (Teaser)
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline (CDP). Today we want to share with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCi and Jenkins to ease the test evaluation process in our continuous delivery pipeline. Today we want to share with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
@@ -45,7 +45,7 @@ Furthermore, considering the ease of extension in the near future as well as a g
 
 ## Implemented Solution
 
-To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criteria we created a visualization, which could presciently highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
+To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criteria we created a visualization, which could distinctly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
 ![Blueprint of the solution architecture](/assets/images/blog-selenium-test-result-evaluation-blueprint-blue.png "Blueprint of the solution architecture")
 
@@ -284,10 +284,11 @@ Additionally, we also take advantage of three other ways to access our Elasticse
 * via search URI requests in the location bar in the browser, e.g:
 
 ```bash
-Schema:
+# URI Schema
 <protocol>://<domain>:<port>/<index>/<document_type>/_count?=<query_string>
 <protocol>://<domain>:<port>/<index>/<document_type>/_search?=<query_string>
-Query String:
+
+# Query String Example
 ?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
 ```
 
@@ -298,7 +299,7 @@ Today the evaluation process is much faster – speaking of less than 5 minutes 
 Besides the in-depth exploration of the ELK ecosystem, which goes way beyond this short article, we also learned a lot of useful craftsmanship skills:
 
 * How to apply TDD to Docker container with encapsulated services.
-* How to write infrastructure as code.
+* How to write even more infrastructure as code in the case of CI jobs.
 * How to run a CircleCi job effectively on parallel nodes if multiple ones are available.
 * How to enjoy long pair-programming sessions, but also when to quickly switch back to separate desks.
 
@@ -316,7 +317,7 @@ Overall we are very happy with the outcome of this project and hope we can spend
 - [x] paragraph: Step 1: Extend test suite reporter
 - [x] listing: Test data structure
 - [x] paragraph: Step 2: Set up Elasticsearch
-- [ ] paragraph: Step 3: Set up logstash
+- [ ] paragraph: Step 3: Set up Logstash
 - [x] listings: Test object transformation
 - [ ] paragraph: Step 4: Integrate solution in continuous delivery pipeline
 - [x] paragraph: Step 5: Usage
