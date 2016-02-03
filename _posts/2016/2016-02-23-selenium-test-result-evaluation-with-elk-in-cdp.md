@@ -227,7 +227,7 @@ This excerpt shows how we organize the output to Elasticsearch. The first line r
 
 Another important point is testing our Logstash Container. We realized this with CircleCi. Every time a Pull Request is sent, CircleCi automatically tests these changes. We arranged two stages. On the first stage the Pull Request has to be reviewed and merged by a person into a dev branch. After this merge, CircleCi retests these changes. If the tests succeeds, the changes will be automatically merge into our master branch.
 
-### Part 4: Integrate Docker Containers in Continuous Delivery Pipeline using Jenkins
+### Part 4: Integrate Docker Containers in Jenkins
 
 **Logstash**
 
