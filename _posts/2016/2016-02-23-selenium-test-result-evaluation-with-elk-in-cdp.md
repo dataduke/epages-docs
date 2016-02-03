@@ -233,7 +233,7 @@ Another important point is testing our Logstash Container. We realized this with
 
 We have several pipeline jobs that run the test suite of the ePages selenium framework on all ePages environment machines. As a result they produce a single log file with the JSON test objects as described in part 1. The test suite is configured to always append new objects so that it doesn't matter if the test suite is invoked in a matrix job, with several test groups in parallel or with a retry option for aborted test if thirdparty sandboxes fail. 
 
-In such Jenkins jobs we added a separate build step where we first checked that all needed environment variables were used. If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see a snippet of console output in verbose mode.
+In such Jenkins jobs we added a separate build step where we first checked that all needed environment variables were used. If everything was setup as expected, we pulled the logstash container from the registry and used the start script to run the container accordingly. Below you can see an extract of the console output in verbose mode.
 
 ```bash
 === Start docker container [to-logstash-run-esf-tests-3829] from image [epages/to-logstash:latest] ===
@@ -256,6 +256,8 @@ Set elasticsearch document type:    6.17.40
 
 a8fa29d74ef97832fcfbc3a0722b728a465244263c9d482b6eec6357d184555b
 
+--- Logstash finished processing and container is terminated.
+
 === No need to stop not running docker container [to-logstash-run-esf-tests-3829] ===
 
 === Remove existing docker container [to-logstash-run-esf-tests-3829] ===
@@ -269,9 +271,9 @@ All shipped test-objects are saved to a logstash info log, which is archived as 
 
 For our elasticsearch docker cluster we configured a new Jenkins job, which ensured that always the latest version of our image is used. We made sure to mount several host directories so that the elasticsearch data, config and logs are  stored on the VM and backuped with its snapshots. By firing up multiple elasticsearch node containers containing to the same cluster we achived load-balance and shard redudandcy.
 
-### Part 5: Set up Elasticsearch UI Client to Evaluate Test Results
+### Part 5: Use the Elasticsearch Client to Evaluate Test Results
 
-At the current state the ESClient is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore the `note` field keeps entries about the causes for test failures with corresponding JIRA ticket numbers, so that every unsuccessful test object is not just marked but also recorded.
+At the current state our Elasticsearch client is the analyzation tool of choice. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with resutlt FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore the `note` field keeps entries about the causes for test failures with corresponding JIRA ticket numbers, so that every unsuccessful test object is not just marked but also recorded.
 
 ![View Tests in Client](/assets/images/blog-selenium-test-result-evaluation-client-red.png "View Tests in Client")
 
