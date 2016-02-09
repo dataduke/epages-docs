@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Optimised collection and evaluation of Selenium UI test result data for multiple environments in the ePages Continuous Delivery Pipeline"
+title: "Automate test result evalution in the Continuous Delivery Pipeline: Background sstory"
 date: "2016-02-02 10:11:12"
 icon: wrench
 categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
