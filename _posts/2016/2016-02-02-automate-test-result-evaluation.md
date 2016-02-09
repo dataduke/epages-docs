@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Automate test result evalution in the Continuous Delivery Pipeline: Background sstory"
+title: "Automated Test Evalution in the Pipeline: Background Story"
 date: "2016-02-02 10:11:12"
 icon: wrench
-categories: tech-stories selenium testing elk cdp elasticsearch logstash continuous-delivery
+categories: tech-stories
 authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
@@ -11,7 +11,7 @@ We implemented a Selenium test report database with Elasticsearch, Logstash, Doc
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
-## Background story
+## Background Story
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) (**ESF**) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated UI tests for each feature to safeguard the functionality of every Cartridge (platform module).
 
@@ -30,7 +30,7 @@ After careful consideration we determined that two non-functional requirements s
 * **Simplicity:** The solution needs to be easy to implement, test, configure and maintain.
 * **Expandability:** Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
 
-### Two options
+### Two Options
 
 At first glance we had two different ideas for our architectural solution approach:
 
@@ -42,7 +42,7 @@ Another important reason was that this approach would give us the opportunity to
 
 In summary, the mentioned ease of extension of Elasticsearch in combination with a generally low effort for maintenance convinced us to strongly opt against building every solution part on our own as suggested in **Option A**.
 
-## Implemented solution
+## Implemented Solution
 
 To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criteria we created a visualization, which could distinctly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
@@ -52,7 +52,7 @@ As you can see above, several components of our infrastructure will be affected 
 
 After the tests have been run, the JSON logs should have been created inside every single Jenkins job. As of now the tricky implementation of this project starts. We have decided to split the implementation in 5 parts and the next sections will explain each one step-by-step.
 
-### Part 1 - Define the test object and extend the test suite reporter
+### Part 1 - Define the Test Object and Extend the Test Suite Reporter
 
 Our initial task consisted of the definition of the desired target format for the individual test objects, which would later be stored in Elasticsearch as [JSON](http://www.json.org/) documents. We determined to create a single object for each test case and represent it as a simple JSON object (without nested fields, like arrays) as this could be easier displayed by several client interfaces of Elasticsearch later on.
 
@@ -242,7 +242,7 @@ The above code snippet shows how we push the output to our Elasticsearch cluster
 
 The CI part for our Logstash container is very similiar to that of the Elasticsearch container. The tests we run are different of course, but the process is the same.
 
-### Part 4 - Integrate Docker containers in pipeline with Jenkins
+### Part 4 - Integrate Docker Containers in Pipeline with Jenkins
 
 #### Logstash
 
@@ -286,7 +286,7 @@ All shipped test objects are saved to a Logstash info log, which is archived as 
 
 For our Elasticsearch Docker cluster we configured a new Jenkins job, which ensured that always the latest stable version of our image is used. We made sure to mount several host directories so that the Elasticsearch data, config and logs are stored on the VM. By firing up multiple Elasticsearch node containers joining the same cluster we achieved load-balance and shard redundancy.
 
-### Part 5 - Use the Elasticsearch Client to evaluate the test results
+### Part 5 - Use the Elasticsearch Client to Evaluate the Test Results
 
 In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
 
@@ -307,7 +307,7 @@ Additionally, we also take advantage of three other ways to access our Elasticse
 ?pretty&size=1000&q=result:failure,skip AND epages_repo_id:*17.06.15
 {% endhighlight %}
 
-## Benefits and conclusion
+## Benefits and Conclusion
 
 Today the evaluation process is much faster: usually less than 5 minutes a day. The tremendous amount of saved time helps a lot in working on other stories.
 
@@ -319,3 +319,4 @@ Besides the in-depth exploration of the ELK ecosystem, which goes way beyond thi
 * How to not only enjoy intense pair programming sessions but also when to quickly switch back to code separately.
 
 Overall we are very happy with the outcome of this project and hope we can spend all the freed up time on other awesome projects about which we can write more blog posts then.
+
