@@ -23,7 +23,7 @@ In the past an engineer of the release and test automation team needed to check 
 
 This tedious and time consuming collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports.
 
-{% image blog-pipeline-elk-test-evaluation-report.png %} The test report index page {% endimage %}
+{% image blog-pipeline-elk-test-evaluation-report.png 20% right %} The test report index page {% endimage %}
 
 ### Requirements
 
