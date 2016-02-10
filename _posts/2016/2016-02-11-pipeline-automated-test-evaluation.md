@@ -23,6 +23,8 @@ In the past an engineer of the release and test automation team needed to check 
 
 This tedious and time consuming collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports.
 
+{% image blog-pipeline-automated-test-evaluation-report.png %} Report Index Page of a Single Test Run {% endimage %}
+
 ### Requirements
 
 After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
@@ -41,6 +43,8 @@ After a team-internal discussion we concluded that we want to implement **Option
 Another important reason was that this approach would give us the opportunity to rather store other business-critical information (e.g. event logs) from a pipeline run in the near future as well. Last but not least, the ePages operations team is already using the ELK-stack at customer projects and hence there is a reliable knowledge source inside the company in case we would need it.
 
 In summary, the mentioned ease of extension of Elasticsearch in combination with a generally low effort for maintenance convinced us to strongly opt against building every solution part on our own as suggested in **Option A**.
+
+### Read on
 
 That's it for now. If you are interested, you may accompany us on the second post which will be published in the next week. The comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
 
