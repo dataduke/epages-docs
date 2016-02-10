@@ -9,7 +9,7 @@ authors: ["Benjamin Nothdurft", "Bastian Klein"]
 
 Today we want to share with you the first of two blog posts on a recent project concerning the workflow optimisation of the Selenium UI test evaluation from multiple environments in our pipeline. This initial article should serve as brief introduction to the business context, encompass the major pain points of the established test evaluation process and constitute the essential requirements for a technical solution. Furthermore we will envision two solution approaches and discuss which option fits best our needs and therefore will be implemented.
 
-The second post will seamlessly follow up and elaborate on the technical aspects of the implementation, but now let us first start digging towards the core of the business challenge.
+The second post will seamlessly follow up and elaborate in-depth on the technical aspects of the implementation, but now let us first start digging towards the core of the business challenge.
 
 ## Background Story
 
@@ -42,9 +42,9 @@ Another important reason was that this approach would give us the opportunity to
 
 In summary, the mentioned ease of extension of Elasticsearch in combination with a generally low effort for maintenance convinced us to strongly opt against building every solution part on our own as suggested in **Option A**.
 
-That's it for now. If you are interested in how we
+That's it for now. If you are interested, you may accompany us on the second post which will be published in the next week. The comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
 
-Accompany us on the second post in the next business days and see yourself if we have decided wisley. To give you a better idea, we will show in-depth how we split up the solution architecture and then focus in depth on the technical implementations. So stay tuned.
+So stay tuned and see yourself if we have choosen our option wisley!
 
 ---
 layout: post
