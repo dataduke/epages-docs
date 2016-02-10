@@ -4,7 +4,7 @@ title: "Automated Test Evalution with ELK in the Pipeline: Background Story"
 date: "2016-02-11 10:11:12"
 icon: wrench
 categories: tech-stories
-authors: ["Benjamin Nothdurft", "Bastian Klein"]
+authors: ["Benjamin N.", "Bastian K."]
 ---
 
 Today we want to share with you the first of two blog posts on a recent project concerning an optimized workflow for the monitoring and evaluation of the Selenium integration test results from multiple environments in our pipeline. This initial article should serve as brief introduction to the business context, encompass the major pain points of the established test evaluation process and constitute the essential requirements for a technical solution. Furthermore we will envision two solution approaches and discuss which option fits best our needs and therefore will be implemented.
@@ -23,7 +23,7 @@ In the past an engineer of the release and test automation team needed to check 
 
 This tedious and time consuming collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports.
 
-{% image blog-pipeline-automated-test-evaluation-report.png %} The test report index page {% endimage %}
+{% image blog-pipeline-elk-test-evaluation-report.png %} The test report index page {% endimage %}
 
 ### Requirements
 
@@ -46,7 +46,7 @@ In summary, the mentioned ease of extension of Elasticsearch in combination with
 
 ### Read on
 
-That's it for now. If you are interested in learning more about this project you may accompany us on the [second post](https://developer.epages.com/blog/2016/02/16/pipeline-elk-test-evaluation-implementation.html) which will be published the next week. This comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
+If you are interested in learning more about this project you may accompany us on the [second post](https://developer.epages.com/blog/2016/02/16/pipeline-elk-test-evaluation-implementation.html) which will be published the next week. This comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
 
 So stay tuned and look forward to find out if we have choosen our options wisley!
 
@@ -56,7 +56,7 @@ title: "Automated Test Evalution with ELK in the Pipeline: Implemented Solution"
 date: "2016-02-16 06:16:02"
 icon: wrench
 categories: tech-stories
-authors: ["Benjamin Nothdurft", "Bastian Klein"]
+authors: ["Benjamin N.", "Bastian K."]
 ---
 
 We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCI and Jenkins to ease the test evaluation process in our Continuous Delivery Pipeline. Last week we have already introduced you to the [background of the project](https://developer.epages.com/blog/2016/02/11/pipeline-elk-test-evaluation-background.html) and today we want to get your hands on the actual development. Hence, this post showcases the various parts of the implemented solution and discusses the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
@@ -311,7 +311,7 @@ For our Elasticsearch Docker cluster we configured a new Jenkins job, which ensu
 
 In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to monitor and analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id (e.g. 6.17.39). You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
 
-{% image blog-pipeline-automated-test-evaluation-client.png %} The test results in the Elasticsearch Client {% endimage %}
+{% image blog-pipeline-elk-test-evaluation-client.png %} The test results in the Elasticsearch Client {% endimage %}
 
 Additionally, we also take advantage of three other ways to access our Elasticsearch cluster:
 
