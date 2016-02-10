@@ -46,20 +46,20 @@ In summary, the mentioned ease of extension of Elasticsearch in combination with
 
 ### Read on
 
-That's it for now. If you are interested, you may accompany us on the second post which will be published in the next week. The comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
+That's it for now. If you are interested, you may accompany us on the [second post](https://developer.epages.com/blog/2016/02/16/pipeline-elk-test-evaluation-implementation.html) which will be published in the next week. The comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
 
-So stay tuned and see yourself if we have choosen our option wisley!
+So stay tuned and look forward to find out if we have choosen our options wisley!
 
 ---
 layout: post
 title: "Automated Test Evalution with ELK in the Pipeline: Implemented Solution"
-date: "2016-02-11 10:11:12"
+date: "2016-02-16 06:16:02"
 icon: wrench
 categories: tech-stories
 authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCI and Jenkins to ease the test evaluation process in our Continuous Delivery Pipeline. Last week we have already introduced you to the [background of the project](https://developer.epages.com/blog/2016/02/11/pipeline-automated-test-evaluation-background.html) and today we want to get your hands on the actual development. Hence, this post showcases the various parts of the implemented solution and discusses the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCI and Jenkins to ease the test evaluation process in our Continuous Delivery Pipeline. Last week we have already introduced you to the [background of the project](https://developer.epages.com/blog/2016/02/11/pipeline-elk-test-evaluation-background.html) and today we want to get your hands on the actual development. Hence, this post showcases the various parts of the implemented solution and discusses the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
 
 Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
