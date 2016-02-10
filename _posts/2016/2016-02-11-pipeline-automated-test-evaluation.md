@@ -15,7 +15,7 @@ The second post will seamlessly follow up and elaborate in-depth on the technica
 
 Currently our [ePages Selenium Framework](https://developer.epages.com/blog/2015/07/23/the-epages-selenium-framework.html) (**ESF**) has evolved to a reputable instrument for quality assurance of the next iteration of the ePages platform. The development teams are highly deliberated in implementing corresponding automated UI tests for each feature to safeguard the functionality of every Cartridge (platform module).
 
-In our Continuous Delivery Pipeline (**CDP**) we run all of these tests in various sets on every possible type of ePages environment, which is either freshly installed or patched to the latest release candidate. The evaluation of all test results from each pipeline run is a fundamentally important duty before releasing the next version of ePages.
+In our Continuous Delivery Pipeline (**CDP**) we run all of these tests in various sets on every possible type of ePages environment, which is either freshly installed or patched to the latest release candidate. The monitoring and evaluation of all test results from each pipeline run is a fundamentally important duty before releasing the next version of ePages.
 
 ### Motivation
 
@@ -23,7 +23,7 @@ In the past an engineer of the release and test automation team needed to check 
 
 This tedious and time consuming collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports.
 
-{% image blog-pipeline-automated-test-evaluation-report.png %} Test Report Index Page {% endimage %}
+{% image blog-pipeline-automated-test-evaluation-report.png %} The test report index page {% endimage %}
 
 ### Requirements
 
@@ -67,7 +67,7 @@ Furthermore, this article should serve as an outline of the consolidated technic
 
 To get the big picture for splitting the Scrum epic into several stories with tasks and acceptance criteria we created a visualization, which could distinctly highlight the various parts that needed to be implemented. The first draft of the blueprint was sketched by hand and looked similar to this:
 
-{% image blog-pipeline-automated-test-evaluation-blueprint.png %} Blueprint of the Solution Architecture {% endimage %}
+{% image blog-pipeline-automated-test-evaluation-blueprint.png %} The blueprint of the solution architecture {% endimage %}
 
 As you can see above, several components of our infrastructure will be affected and also involved throughout the development of this project. The middle tier shows the essential interdigitation of the underlying job chain in our pipeline. Usually a CDP run involves several prepare jobs; then a huge amount of install and patch jobs are run in parallel on the various VMs of the vCenter (top tier); afterwards a fingerprint of all machines is created and finally the ESF testsuite (and others) are run onto all vCenter VMs. Sometimes the testsuite is even running against an ePages VM before, during and after patching has started (zero-down-time tests), so don't take the blueprint to literally.
 
@@ -309,9 +309,9 @@ For our Elasticsearch Docker cluster we configured a new Jenkins job, which ensu
 
 ### Part 5 - Use the Elasticsearch Client to Evaluate the Test Results
 
-In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id (e.g. 6.17.39). You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
+In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to monitor and analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id (e.g. 6.17.39). You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
 
-{% image blog-pipeline-automated-test-evaluation-client.png %} Test Results in the Elasticsearch Client {% endimage %}
+{% image blog-pipeline-automated-test-evaluation-client.png %} The test results in the Elasticsearch Client {% endimage %}
 
 Additionally, we also take advantage of three other ways to access our Elasticsearch cluster:
 
