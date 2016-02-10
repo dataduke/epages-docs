@@ -23,7 +23,7 @@ In the past an engineer of the release and test automation team needed to check 
 
 This tedious and time consuming collection task was soon identified as a major pain point. Hence, we decided to fully automate the process and figure out an effective, reliable and centralised storage solution for all test reports.
 
-{% image blog-pipeline-automated-test-evaluation-report.png %} Report Index Page of a Single Test Run {% endimage %}
+{% image blog-pipeline-automated-test-evaluation-report.png %} Test Report Index Page {% endimage %}
 
 ### Requirements
 
@@ -309,7 +309,7 @@ For our Elasticsearch Docker cluster we configured a new Jenkins job, which ensu
 
 ### Part 5 - Use the Elasticsearch Client to Evaluate the Test Results
 
-In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id. You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
+In the current state we use the [Elasticsearch Client](https://github.com/rdpatil4/ESClient) to analyze the test results. Here you can browse and filter the documents via dropdown menus for the index, which is our test object type (e.g. cdp-ui-tests) and the document type, which is the ePages repo id (e.g. 6.17.39). You can then narrow down the search with simple matches in the search field (e.g. only show tests with result FAILURE) or use the official [Lucence Query](http://www.lucenetutorial.com/lucene-query-syntax.html), which supports boolean operators, range matchers and more advanced features similar to a regex. It is possible to edit every single test object within the client by double-clicking a tabular row. Therefore, the `note` field can be used to add information about the error, like the cause of the error and the correspondong JIRA issue id.
 
 {% image blog-pipeline-automated-test-evaluation-client.png %} Test Results in the Elasticsearch Client {% endimage %}
 
