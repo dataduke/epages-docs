@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Automated Test Evalution with ELK in the Pipeline: Implemented Solution"
+title: "Automated Test Evalution with ELK in the Pipeline: Background Story"
 date: "2016-02-11 10:11:12"
 icon: wrench
 categories: tech-stories
 authors: ["Benjamin Nothdurft", "Bastian Klein"]
 ---
 
-We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCI and Jenkins to ease the test evaluation process in our Continuous Delivery Pipeline. Today we want to share with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
+Today we want to share with you the first of two blog posts on a recent project concerning the workflow optimisation of the Selenium UI test evaluation from multiple environments in our pipeline. This initial article should serve as brief introduction to the business context, encompass the major pain points of the established test evaluation process and constitute the essential requirements for a better solution. Furthermore we will envision two solution approaches and discuss which option fits best our needs and therefore will be implemented.
 
-Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
+The second post will seamlessly follow up and elaborate on the technical aspects of the implemented solution, but now let us first start digging towards the core of the business challenge.
 
 ## Background Story
 
@@ -28,7 +28,7 @@ This tedious and time consuming collection task was soon identified as a major p
 After careful consideration we determined that two non-functional requirements should be in the focus of the intended solution:
 
 * **Simplicity:** The solution needs to be easy to implement, test, configure and maintain.
-* **Expandability:** Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines.
+* **Expandability:** Later on, the solution needs to be able to additionally handle other kinds of logs from our pipeline machines as well as scale with the amount and frequency of data input.
 
 ### Two Options
 
@@ -41,6 +41,23 @@ After a team-internal discussion we concluded that we want to implement **Option
 Another important reason was that this approach would give us the opportunity to rather store other business-critical information (e.g. event logs) from a pipeline run in the near future as well. Last but not least, the ePages operations team is already using the ELK-stack at customer projects and hence there is a reliable knowledge source inside the company in case we would need it.
 
 In summary, the mentioned ease of extension of Elasticsearch in combination with a generally low effort for maintenance convinced us to strongly opt against building every solution part on our own as suggested in **Option A**.
+
+### 
+
+Accompany us on finding the best solution and see if we decided wisley decided which of the possible solution approaches
+
+---
+layout: post
+title: "Automated Test Evalution with ELK in the Pipeline: Implemented Solution"
+date: "2016-02-11 10:11:12"
+icon: wrench
+categories: tech-stories
+authors: ["Benjamin Nothdurft", "Bastian Klein"]
+---
+
+We implemented a Selenium test report database with Elasticsearch, Logstash, Docker, CircleCI and Jenkins to ease the test evaluation process in our Continuous Delivery Pipeline. Today we want to share with you the background story of the project, showcase the various parts of the implemented solution and discuss the pragmatic benefits for our pipeline and our speed-up for massive regression test evaluation.
+
+Furthermore, this article should serve as an outline of the consolidated technical expertise gained throughout the engineering process of this project.
 
 ## Implemented Solution
 
