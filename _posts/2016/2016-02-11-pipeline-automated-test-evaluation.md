@@ -46,7 +46,7 @@ In summary, the mentioned ease of extension of Elasticsearch in combination with
 
 ### Read on
 
-That's it for now. If you are interested, you may accompany us on the [second post](https://developer.epages.com/blog/2016/02/16/pipeline-elk-test-evaluation-implementation.html) which will be published in the next week. The comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
+That's it for now. If you are interested in learning more about this project you may accompany us on the [second post](https://developer.epages.com/blog/2016/02/16/pipeline-elk-test-evaluation-implementation.html) which will be published the next week. This comprehensive follow-up will outline the solution architecture, split it up into individual solution parts and then focus on the technical details including the setup of Elasticsearch, Logstash, Docker, Jenkins Jobs, Docker and CircleCI. 
 
 So stay tuned and look forward to find out if we have choosen our options wisley!
 
