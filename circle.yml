@@ -6,10 +6,44 @@ machine:
   environment:
     DOCKER_IMAGE_ELASTICSEARCH: docker.epages.com/epages/docs-elasticsearch
     DOCKER_IMAGE_NGINX: docker.epages.com/epages/docs-nginx
+    DOCKER_IMAGE_RUBY: docker.epages.com/epages/docs-ruby
+    DOCKER_IMAGE_TAG: ${CIRCLE_BRANCH//\//-}
+    
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    # Docker environment used.
+    - docker info
+    # Load cached images, if available.
+    - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
+    # Build our image.
+    - docker build -t "${DOCKER_IMAGE_DEV}:${DOCKER_IMAGE_TAG}" -f Dockerfile.dev .
+    # Save built image into cache.
+    - mkdir -v -p ~/docker; docker save "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" > ~/docker/image.tar
+    # Make sure circle project parallelism is set to at least 2 nodes.
+    - | 
+        if [[ "${CIRCLE_NODE_TOTAL}" -eq "1" ]]; then {
+          echo "Parallelism [${CIRCLE_NODE_TOTAL}x] needs to be 2x to fasten execution time." 
+          echo "You also need to set our circle env CIRCLE_PARALLEL [${CIRCLE_PARALLEL}] to true." 
+        }; fi
 
 test:
   override:
-    - bundle exec rake test
+    - ? >
+        case $CIRCLE_NODE_INDEX in 
+        0)
+          bundle exec rake test
+          $CIRCLE_PARALLEL && exit 0
+          ;&
+        1)
+          docker run -d --rm -p 127.0.0.1:4000:4000 "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}"
+          curl 127.0.0.1:4000 | grep "Blog" || exit 1
+          docker stop "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}"
+          ;&
+        esac
+      : parallel: true
+          
 
 deployment:
   dockerimages:
@@ -24,9 +58,11 @@ deployment:
       - docker stop elasticsearch
 
       - docker login -u "$DOCKER_LOGIN_USERNAME" -p "$DOCKER_LOGIN_PASSWORD" -e "$DOCKER_LOGIN_EMAIL" docker.epages.com
-      - docker commit elasticsearch "$DOCKER_IMAGE_ELASTICSEARCH:${CIRCLE_BRANCH//\//-}"
-      - docker push "$DOCKER_IMAGE_ELASTICSEARCH:${CIRCLE_BRANCH//\//-}"
+      - docker commit elasticsearch "$DOCKER_IMAGE_ELASTICSEARCH:${DOCKER_IMAGE_TAG}"
+      - docker push "$DOCKER_IMAGE_ELASTICSEARCH:${DOCKER_IMAGE_TAG}"
 
       - bundle exec rake build
-      - docker build -t "$DOCKER_IMAGE_NGINX:${CIRCLE_BRANCH//\//-}" .
-      - docker push "$DOCKER_IMAGE_NGINX:${CIRCLE_BRANCH//\//-}"
+      - docker build -t "$DOCKER_IMAGE_NGINX:${DOCKER_IMAGE_TAG}" .
+      - docker push "$DOCKER_IMAGE_NGINX:${DOCKER_IMAGE_TAG}"
+      
+      - docker push "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}"
