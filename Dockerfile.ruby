@@ -1,25 +1,36 @@
 # Use official Ruby image
-FROM ruby:2.1
+FROM ruby:2.2-alpine
 
 ####################
 # Configure basics #
 ####################
 
 # Configure timezone server
-ENV TZ="Europe/Berlin"
-RUN echo "${TZ}" | tee /etc/timezone && \
-    dpkg-reconfigure --frontend noninteractive tzdata
+# ENV TZ="Europe/Berlin"
+# RUN echo "${TZ}" | tee /etc/timezone && \
+#    dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install missing packages
-RUN echo "deb http://ftp.de.debian.org/debian jessie main" >> /etc/apt/sources.list && \
-    apt-get update && apt-get install --yes \
-    locales
+# RUN echo "deb http://ftp.de.debian.org/debian jessie main" >> /etc/apt/sources.list && \
+#    apt-get update && apt-get install --yes \
+#    locales
 
 # Set server locale
-ENV LANG="en_US.UTF-8" \
-    LANGUAGE="en_US.UTF-8"
-RUN locale-gen en_US.UTF-8 && \
-    localedef en_US.UTF-8 -i en_US -fUTF-8
+# ENV LANG="en_US.UTF-8" \
+#    LANGUAGE="en_US.UTF-8"
+# RUN locale-gen en_US.UTF-8 && \
+#    localedef en_US.UTF-8 -i en_US -fUTF-8
+
+ENV BUILD_PACKAGES bash build-base make gcc
+ENV RUBY_PACKAGES ruby-dev ruby-io-console
+
+# Update and install all of the required packages.
+# At the end, remove the apk cache
+RUN apk update && \
+    apk upgrade && \
+    apk add $BUILD_PACKAGES && \
+    apk add $RUBY_PACKAGES && \
+    rm -rf /var/cache/apk/*
 
 #################################
 # Setup epages-docs environment #
