@@ -4,6 +4,8 @@
 
 ## Usage
 
+Tip: You can skip these steps if you prefer to run the site via docker (see section below).
+
 ~~~ bash
 # install dependencies
 $ bundle
@@ -37,25 +39,24 @@ You can use this [shell script][bootstrap-linux] to turn your laptop into an awe
 
 TODO
 
-
-## Docker as dev machine
+## Run a Docker container for development
 
 If you don't like to bootstrap your machine you can run a [Docker][Docker] container for development. It can be pulled from our registry. You need to have [Docker Engine][docker-engine] installed.
 
 ~~~ bash
-# pull container and execute default task: run a local server with auto rebuilding
+# build locally (instead of pull from our registry)
+$ docker build -t epages.com/docs-dev -f Dockerfile.ruby .
+
+# pull container and serve repo as jekyll site
 $ docker run --rm --volume=$(pwd):/usr/src/epages-docs -p 127.0.0.1:4000:4000 docker.epages.com/epages/docs-ruby
 
-# run bash in the container and use like local machine
+# run bash in the container and use like local machine (all rake tasks possible)
 $ docker run --rm --volume=$(pwd):/usr/src/epages-docs -p 127.0.0.1:4000:4000 -it docker.epages.com/epages/docs-ruby bash
 
-# run via docker machine on mac
+# run via docker machine on a mac
 $ export IP=$(docker-machine ip `docker-machine active`)
 $ echo "Open in browser: http://${IP}:4000/"
 $ docker run --rm --volume=$(pwd):/usr/src/epages-docs -p ${IP}:4000:4000 -it docker.epages.com/epages/docs-ruby
-
-# build locally
-$ docker build -t epages.com/docs-dev -f Dockerfile.ruby .
 ~~~
 
 ## License
