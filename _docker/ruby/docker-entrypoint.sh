@@ -7,8 +7,9 @@ set -e
 # then own all mounted volumes with epages user
 # and run given rake task as epages user.
 if [[ "${1}" = 'rake' ]]; then
-    chown -R ${EPAGES_USER}:${EPAGES_USER} ${EPAGES_DOCS}
-    set -- gosu ${EPAGES_USER} "${@}"
+	gosu ${EPAGES_USER} bundle exec jekyll build -t
+    chown -R ${EPAGES_USER}:${EPAGES_USER} ${RUBY_HOME} ${EPAGES_DOCS}
+    set bundle exec jekyll serve --host 0.0.0.0 --watch
 fi
 
 # If the first argument is test, build or index 

@@ -36,7 +36,8 @@ RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364
 # Setup epages-docs environment #
 #################################
 
-ENV EPAGES_DOCS="/usr/src/epages-docs" \
+ENV RUBY_HOME="/usr/local" \
+    EPAGES_DOCS="/usr/src/epages-docs" \
     EPAGES_USER="epages"
 
 # Add user
@@ -44,15 +45,17 @@ RUN groupadd -r ${EPAGES_USER} && useradd -r -g ${EPAGES_USER} ${EPAGES_USER}
 
 # Create the workdir for epages-docs
 RUN mkdir -p ${EPAGES_DOCS} && \
-    chown -R ${EPAGES_USER}:${EPAGES_USER} /usr
+    chown -R ${EPAGES_USER}:${EPAGES_USER} ${RUBY_HOME}
 WORKDIR ${EPAGES_DOCS}
 
 # Install gems
 COPY Gemfile Gemfile.lock ${EPAGES_DOCS}/
-RUN bundle install
+RUN bundle install && \
+    chown -R ${EPAGES_USER}:${EPAGES_USER} ${RUBY_HOME}
 
 # Copy repo to enable running without the mounted volume
-COPY . ${EPAGES_DOCS}
+COPY . ${EPAGES_DOCS}/
+RUN chown -R ${EPAGES_USER}:${EPAGES_USER} ${EPAGES_DOCS} 
 
 # Set mountpoint
 VOLUME ${EPAGES_DOCS}
@@ -62,7 +65,7 @@ EXPOSE 4000
 
 # Add our entrypoint script
 COPY _docker/ruby/docker-entrypoint.sh /
-RUN chown -R ${EPAGES_USER}:${EPAGES_USER} /docker-entrypoint.sh /usr ${EPAGES_DOCS} && \
+RUN chown -R ${EPAGES_USER}:${EPAGES_USER} /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
