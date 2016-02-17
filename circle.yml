@@ -40,7 +40,7 @@ test:
           sleep 10
           docker stop elasticsearch
           bundle exec rake build
-          docker build -t "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" .
+          docker build -t "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" -f Dockerfile.ngnix .
           mkdir -v -p ~/docker; docker save "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" > ~/docker/image_ngnix.tar
           # Exit case statement if run in parallel else proceed to next case.
           $CIRCLE_PARALLEL && exit 0
