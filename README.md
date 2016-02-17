@@ -45,12 +45,12 @@ If you don't like to bootstrap your machine you can run a [Docker][Docker] conta
 
 ~~~ bash
 # build locally (instead of pull from our registry)
-$ docker build -t epages.com/docs-dev -f Dockerfile.ruby .
+$ docker build -t docker.epages.com/epages/docs-ruby -f Dockerfile.ruby .
 
 # pull container and serve repo as jekyll site
 $ docker run --rm --volume=$(pwd):/usr/src/epages-docs -p 127.0.0.1:4000:4000 docker.epages.com/epages/docs-ruby
 
-# run bash in the container and use like local machine (all rake tasks possible)
+# run bash in the container and use it like a local machine (with all rake tasks)
 $ docker run --rm --volume=$(pwd):/usr/src/epages-docs -p 127.0.0.1:4000:4000 -it docker.epages.com/epages/docs-ruby bash
 
 # run via docker machine on a mac
