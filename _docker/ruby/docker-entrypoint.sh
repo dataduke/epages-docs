@@ -1,17 +1,23 @@
 #!/bin/bash
 
-# If any script fails then exit 1
+# If any script fails then exit 1.
 set -e
 
-# If the first argument is rake then run it
+# Own mounted docker volumes (files on host).
+chown -R root:root ${EPAGES_DOCS}
+
+# If the first argument is rake
+# then set exec with all given args.
 if [[ "${1}" = 'rake' ]]; then
     set "${@}"
 fi
 
-# If the first argument is test, build or index then prepend it with rake
+# If the first argument is test, build or index 
+# then set exec to prepend with rake.
 if [[ "${1}" =~ ^.*(test)|(build)|(index).*$ ]]; then
     set rake "${@}"
 fi
 
-# If the argument is not related to ruby (e.g. `bash`) then run it as root
+# Execute defined arguments.
+# This includes not ruby related args (e.g. `bash`).
 exec "${@}"
