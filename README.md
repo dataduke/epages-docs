@@ -39,7 +39,7 @@ You can use this [shell script][bootstrap-linux] to turn your laptop into an awe
 
 TODO
 
-## Run in ruby container
+## Preview in ruby container
 
 If you don't like to bootstrap your machine you can also run a [Docker][docker] container for development by invoking a single command only. The container will be pulled from our registry. You need to have [Docker Engine][docker-engine] installed first.
 
