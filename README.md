@@ -41,7 +41,7 @@ TODO
 
 ## Run a ruby container
 
-If you don't like to bootstrap your machine you can also run a [Docker][Docker] container for development by invoking a single command only. The container will be pulled from our registry. You need to have [Docker Engine][docker-engine] installed first.
+If you don't like to bootstrap your machine you can also run a [Docker][docker] container for development by invoking a single command only. The container will be pulled from our registry. You need to have [Docker Engine][docker-engine] installed first.
 
 ~~~ bash
 # [pull and] run container with default rake task (eq. build `_site` and serve via jekyll)
@@ -94,6 +94,7 @@ is licensed under [CC-BY-4.0][license-cc-by-40]. The logos in the folder `assets
 
 [vagrant]: https://www.vagrantup.com/
 [virtualbox]: https://www.virtualbox.org/
+[docker]: https://www.docker.com/
 [docker-engine]: https://docs.docker.com/engine/installation/
 
 [license-cc-by-40]: http://creativecommons.org/licenses/by/4.0/
