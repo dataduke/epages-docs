@@ -83,7 +83,7 @@ test:
         case ${CIRCLE_NODE_INDEX} in
         0)
           set -e
-          if [[ "$CIRCLE_BRANCH" =~ "^(try)|(master)$" ]]; then {
+          if [[ "$CIRCLE_BRANCH" =~ "^.*(try)|(master).*$" ]]; then {
             docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
             docker push "${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}] ===\n"
             docker push "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}] ===\n"
@@ -99,7 +99,7 @@ test:
           ;&
         1)
           set -e
-          if [[ "$CIRCLE_BRANCH" =~ "^(try)|(master)$" ]]; then {
+          if [[ "$CIRCLE_BRANCH" =~ "^.*(try)|(master).*$" ]]; then {
             docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
             docker push "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}] ===\n"
           }; fi
