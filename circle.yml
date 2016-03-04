@@ -78,7 +78,21 @@ test:
           ;;
         esac
       : parallel: true
-
+  post:
+      - ? >
+        case ${CIRCLE_NODE_INDEX} in
+        0)
+          echo "hello"
+          # Exit case statement if run in parallel else proceed to next case.
+          if [[ "$CIRCLE_BRANCH" == "try" ]]; then echo "foo"; fi
+          if [[ "$CIRCLE_BRANCH" == "abc" ]]; then echo "bar"; fi
+          $CIRCLE_PARALLEL && exit 0
+          ;&
+        1)
+          echo "world"
+          ;;
+        esac
+      : parallel: true
 
 deployment:
   push_tag_develop:
