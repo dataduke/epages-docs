@@ -32,10 +32,10 @@ dependencies:
   pre:
     - docker info
     - |
-        if [[ "${CIRCLE_NODE_TOTAL}" -eq "1" ]]; then {
+        if [[ "${CIRCLE_NODE_TOTAL}" -eq "1" ]]; then
           echo "Parallelism [${CIRCLE_NODE_TOTAL}x] needs to be 2x to fasten execution time." 
           echo "You also need to set our machine env var CIRCLE_PARALLEL [${CIRCLE_PARALLEL}] to true." 
-        }; fi
+        fi
 
 
 test:
@@ -84,16 +84,19 @@ test:
         0)
           set -e
           if [[ "$CIRCLE_BRANCH" == "try" ||  "$CIRCLE_BRANCH" == "master" ]]; then
-            docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}";
-            docker push "${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}] ===\n";
-            docker push "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}] ===\n";
+            docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
+            docker push "${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}] ===\n"
+            docker push "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}] ===\n"
           fi
-          if [[ "$CIRCLE_BRANCH" == "master" ]]; then {
-            docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:stable";
-            docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:latest";
-            docker push "${DOCKER_IMAGE_NGINX}:stable" && echo -e "\n=== Pushed [${DOCKER_IMAGE_NGINX}:stable] ===\n";
-            docker push "${DOCKER_IMAGE_NGINX}:latest" && echo -e "\n=== Pushed [${DOCKER_IMAGE_NGINX}:latest] ===\n";
-          }; fi
+          if [[ "$CIRCLE_BRANCH" == "try" ]]; then
+            echo "--test--"
+          fi 
+          if [[ "$CIRCLE_BRANCH" == "master" ]]; then
+            docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:stable"
+            docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:latest"
+            docker push "${DOCKER_IMAGE_NGINX}:stable" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_NGINX}:stable] ===\n"
+            docker push "${DOCKER_IMAGE_NGINX}:latest" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_NGINX}:latest] ===\n"
+          fi
           # Exit case statement if run in parallel else proceed to next case.
           $CIRCLE_PARALLEL && exit 0
           ;&
@@ -101,14 +104,14 @@ test:
           set -e
           if [[ "$CIRCLE_BRANCH" == "try" ||  "$CIRCLE_BRANCH" == "master" ]]; then
             docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
-            docker push "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== Pushed [${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}] ===\n"
+            docker push "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}] ===\n"
           fi
-          if [[ "$CIRCLE_BRANCH" == "master" ]]; then {
+          if [[ "$CIRCLE_BRANCH" == "master" ]]; then
             docker tag "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_RUBY}:stable"
             docker tag "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_RUBY}:latest"
-            docker push "${DOCKER_IMAGE_RUBY}:stable" && echo -e "\n=== Pushed [${DOCKER_IMAGE_RUBY}:stable] ===\n"
-            docker push "${DOCKER_IMAGE_RUBY}:latest" && echo -e "\n=== Pushed [${DOCKER_IMAGE_RUBY}:latest] ===\n"
-          }; fi
+            docker push "${DOCKER_IMAGE_RUBY}:stable" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_RUBY}:stable] ===\n"
+            docker push "${DOCKER_IMAGE_RUBY}:latest" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_RUBY}:latest] ===\n"
+          fi
           ;;
         esac
       : parallel: true
