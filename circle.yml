@@ -79,7 +79,7 @@ test:
         esac
       : parallel: true
   post:
-      - ? >
+    - ? >
         case ${CIRCLE_NODE_INDEX} in
         0)
           echo "hello"
