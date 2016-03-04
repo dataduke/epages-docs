@@ -88,9 +88,6 @@ test:
             docker push "${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}] ===\n"
             docker push "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" && echo -e "\n=== DEPLOYED image [${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}] ===\n"
           fi
-          if [[ "$CIRCLE_BRANCH" == "try" ]]; then
-            echo "--test--"
-          fi 
           if [[ "$CIRCLE_BRANCH" == "master" ]]; then
             docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:stable"
             docker tag "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}" "${DOCKER_IMAGE_NGINX}:latest"
