@@ -84,7 +84,7 @@ test:
         0)
           set -e
           docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
-          if [[ "$CIRCLE_BRANCH" =~ "^(develop|master)$" ]]; then {
+          if [[ "$CIRCLE_BRANCH" =~ "^(develop)|(master)$" ]]; then {
             docker push "${DOCKER_IMAGE_ELASTICSEARCH}:${DOCKER_IMAGE_TAG}"
             docker push "${DOCKER_IMAGE_NGINX}:${DOCKER_IMAGE_TAG}"
           }; fi
@@ -100,7 +100,7 @@ test:
         1)
           set -e
           docker login -u "${DOCKER_LOGIN_USERNAME}" -p "${DOCKER_LOGIN_PASSWORD}" -e "${DOCKER_LOGIN_EMAIL}" "${DOCKER_REGISTRY}"
-          if [[ "$CIRCLE_BRANCH" =~ "^(develop|master)$" ]]; then {
+          if [[ "$CIRCLE_BRANCH" =~ "^(develop)|(master)$" ]]; then {
             docker push "${DOCKER_IMAGE_RUBY}:${DOCKER_IMAGE_TAG}"
           }; fi
           if [[ "$CIRCLE_BRANCH" == "master" ]]; then {
