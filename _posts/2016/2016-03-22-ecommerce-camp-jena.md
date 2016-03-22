@@ -34,10 +34,8 @@ On Saturday there were only three time slots before the closing speech. The firs
 
 To brighten the mood of all participants the facilitators supplied superb food which fullfilled all desires: crispy chicken legs, juicy steaks, grilled roast beefs, 5 different soups, plenty of vegetarian food, 10 dessert creme varieties, cake pops, tropical fruits and even a popcorn machine wagon was present. Consistently, I could spot happy foodies everywhere!
 
-- gaming 
-- messe
+Another form of active relaxation between the session breaks could be accomplished by a short visit of the gaming corner. Several retro consoles awaited their live field-test in battle matches with Super Mario Kart and other classics.
 
 ## Resume
 
-- some great sessions
-- do it again next year
+The conference offered a friendly atmosphere to meet new people with a wide range of backgrounds. Many sessions were quite enjoyable and there were also some great ones. Before the eCommerceCamp is after the eCommerceCamp, so be ready for a visit next year!
