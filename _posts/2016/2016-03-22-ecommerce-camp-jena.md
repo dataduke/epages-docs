@@ -28,7 +28,7 @@ Another interesting session was a guided discussion about Magento 2. Björn Jaco
 
 The last track on friday was offered by Andreas Ziethen, who humbly claims to be the senior apprentice at his company. In fact he is the highly likeable head of RND that flawlessly proved his comprehensive knowledge about deployment automation in front of a full room. The encouraging talk focused on the usage of GitLab for deployment and Rundeck for job scheduling and runbook automation. Today, the interplay of both technologies is already at a very mature quality level and typical tasks like staging and conditional build steps can be represented within versioned job descriptions. If you have a small project with an according set of requirements for your CI and CD pipeline setup the discussed solution might be competetive with Jenkins, Bamboo or TeamCity.
 
-## The saturday 
+On saturday I visted a session about 
 
 11:00 Frontend Acceptance Testing with BDD
 Eimantas Kaleiva
