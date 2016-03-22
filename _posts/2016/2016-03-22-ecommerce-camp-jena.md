@@ -12,7 +12,7 @@ Attendees from the global eCommerce players are typically lesser represented, bu
 
 ## The setting
 
-The event began with a dinner on Thursday evening in the famous local restaurant ["Zur Noll"](http://www.zur-noll.de/), which should break the ice of everyone's comfort zone and kickoff the communication flow.
+The event began with a dinner on Thursday evening in the famous local restaurant [Zur Noll](http://www.zur-noll.de/), which should break the ice of everyone's comfort zone and kickoff the communication flow.
 
 On Friday morning the session planning for both days took place. Everybody can suggest an own Open Space talk. The crowd expresses interest in a suggestion via raising their hands. This immediate reaction allows a proper planning of the time slot and room allocation for the session.
 
@@ -32,10 +32,12 @@ On Saturday there were only three time slots before the closing speech. The firs
 
 ## The surroundings
 
-To brighten the mood of all participants the facilitators supplied superb food which fullfilled all desires: crispy chicken legs, juicy steaks, grilled roast beefs, 5 different soups, plenty of vegetarian food, 10 dessert creme varieties, cake pops, tropical fruits and even a popcorn machine wagon was present. Consistently, I could spot happy foodies everywhere!
+To brighten the mood of all participants the facilitators supplied superb food which fulfilled multitudinous desires: crispy chicken legs, juicy steaks, grilled roast beefs, 5 different soups, plenty of vegetarian food, fresh asparagus and salmon, many sandwich variations, 10 dessert cremes, cake pops, tropical fruits and even a popcorn machine wagon was present. Consistently, I could spot happy foodies everywhere!
 
 Another form of active relaxation between the session breaks could be accomplished by a short visit of the gaming corner. Several retro consoles awaited their live field-test in battle matches with Super Mario Kart and other classics.
 
 ## Resume
 
-The conference offered a friendly atmosphere to meet new people with a wide range of backgrounds. Many sessions were quite enjoyable and there were also some great ones. Before the eCommerceCamp is after the eCommerceCamp, so be ready for a visit next year!
+All in all, the conference offered a friendly atmosphere to meet new people with a wide range of backgrounds. Many sessions were quite enjoyable with a wide variety of topics. There were some great ones, too. From what I have seen, the conference can totally be recommended for PHP developers and ecommerce newcomers. 
+
+Before the eCommerceCamp is after the eCommerceCamp, so be ready for a visit next year!
