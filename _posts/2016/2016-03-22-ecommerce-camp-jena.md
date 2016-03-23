@@ -28,7 +28,9 @@ Another interesting session was a guided discussion about [Magento 2](https://ma
 
 The last track on Friday was offered by Andreas Ziethen, who humbly claims to be the senior apprentice at his company. In fact he is the highly likeable head of RND that flawlessly proved his comprehensive knowledge about deployment automation in front of a full room. The encouraging talk focused on the usage of GitLab for deployment and Rundeck for job scheduling and runbook automation. Today, the interplay of both technologies is already at a very mature quality level and typical tasks like staging and conditional build steps can be represented within versioned job descriptions. If you have a small shop project with a minimal set of requirements for your CI and CD pipeline setup the discussed solution might be competitive with [Jenkins](https://jenkins-ci.org), [Bamboo](https://confluence.atlassian.com/bamboo) or [TeamCity](https://www.jetbrains.com/teamcity/).
 
-On Saturday there were only three time slots before the closing speech. The first session centered around Continuous Integration in a large-scale shop plattform, the second one showcased frontend acceptance testing with a own [BDD](http://behaviourdriven.org/)-style interface and test cases written by the product owner and the very last session comprised the findings for relaunches of large shops by Jan Persiel.
+On Saturday there were only three time slots before the closing speech. 
+
+The first session, presented by Oliver Reißig, centered around Continuous Integration in a large-scale shop platform utilizing [Gradle](http://gradle.org/). In the second one Eimantas Kaleiva showcased frontend acceptance testing, where the test cases were written by the product owner in a [BDD](http://behaviourdriven.org/)-style webinterface similar to [Cucumber](https://cucumber.io). The very last session comprised the findings for relaunches of large shops under various key aspects (e.g. the usage of [Atomic Design](http://bradfrost.com/blog/post/atomic-web-design) for the storefront layout or the establishment of worthwhile meeting structures) and was moderated by Jan Persiel.
 
 ## The surroundings
 
